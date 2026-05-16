@@ -3,496 +3,851 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>المصري الذكي – النسخة الخرافية 🦅</title>
+  <title>المصري الذكي – النسخة الفخمة 🦅 v4.0</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <style>
     :root {
-      --bg-1: #06111f;
-      --bg-2: #0b1730;
-      --bg-3: #102240;
-      --panel: rgba(11, 20, 38, 0.78);
-      --panel-strong: rgba(7, 14, 27, 0.96);
-      --text: #eaf2ff;
-      --muted: #9fb2cf;
-      --primary: #10a37f;
-      --gold: #ffd166;
-      --shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+      --bg-dark: #0a0e27;
+      --bg-darker: #05070f;
+      --bg-card: #1a1f3a;
+      --bg-light: #2d3561;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a9c9;
+      --accent-primary: #10a37f;
+      --accent-gold: #ffd166;
+      --accent-cyan: #00d9ff;
+      --shadow-lg: 0 25px 60px rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 15px 35px rgba(0, 0, 0, 0.25);
+      --shadow-sm: 0 5px 15px rgba(0, 0, 0, 0.15);
+      --gradient-primary: linear-gradient(135deg, #10a37f 0%, #00d9ff 50%, #ffd166 100%);
+      --gradient-dark: linear-gradient(135deg, rgba(16, 163, 127, 0.2), rgba(0, 217, 255, 0.15));
     }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; width: 100%; }
+    
     body {
-      font-family: 'Cairo', sans-serif;
-      color: var(--text);
+      font-family: 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-darker);
+      color: var(--text-primary);
       overflow: hidden;
-      background:
-        radial-gradient(circle at top right, rgba(16, 163, 127, 0.18), transparent 28%),
-        radial-gradient(circle at bottom left, rgba(255, 209, 102, 0.10), transparent 26%),
-        linear-gradient(135deg, var(--bg-1), var(--bg-2) 52%, var(--bg-3));
     }
+
+    /* ===== BACKGROUND SYSTEM ===== */
     .wallpaper {
       position: fixed;
       inset: 0;
-      background-position: center;
       background-size: cover;
+      background-position: center;
       background-repeat: no-repeat;
-      opacity: 0.58;
-      filter: saturate(1.1) contrast(1.05);
-      transition: background-image 0.7s ease, opacity 0.4s ease;
+      opacity: 0.45;
+      filter: saturate(1.05) contrast(1.08) brightness(0.95);
+      transition: background-image 1s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
       pointer-events: none;
-      transform: scale(1.03);
+      z-index: 0;
     }
+
     .overlay {
       position: fixed;
       inset: 0;
-      background: linear-gradient(135deg, rgba(3, 8, 16, 0.18), rgba(5, 11, 20, 0.18));
+      background: 
+        radial-gradient(circle at 30% 70%, rgba(16, 163, 127, 0.08), transparent 50%),
+        linear-gradient(135deg, rgba(5, 7, 15, 0.75), rgba(10, 14, 39, 0.85), rgba(5, 7, 15, 0.75));
       pointer-events: none;
+      z-index: 1;
+      backdrop-filter: blur(2px);
     }
+
     .app {
       position: relative;
-      z-index: 1;
+      z-index: 2;
       display: flex;
       width: 100%;
       height: 100vh;
     }
+
+    /* ===== SIDEBAR ===== */
     .sidebar {
       width: 380px;
       min-width: 380px;
       height: 100vh;
       display: flex;
       flex-direction: column;
-      background: linear-gradient(180deg, rgba(7, 15, 28, 0.98), rgba(9, 17, 33, 0.96));
-      border-left: 1px solid rgba(255, 255, 255, 0.06);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(24px);
+      background: linear-gradient(180deg, rgba(10, 14, 39, 0.95), rgba(5, 7, 15, 0.98));
+      border-left: 1px solid rgba(16, 163, 127, 0.1);
+      backdrop-filter: blur(30px);
+      box-shadow: var(--shadow-lg);
       overflow: hidden;
       position: relative;
     }
-    .sidebar::after {
+
+    .sidebar::before {
       content: '';
       position: absolute;
-      inset: auto -30% -35% auto;
-      width: 320px;
-      height: 320px;
-      background: radial-gradient(circle, rgba(16, 163, 127, 0.22), transparent 65%);
+      top: -50%;
+      right: -20%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(16, 163, 127, 0.15), transparent 70%);
+      border-radius: 50%;
       pointer-events: none;
+      filter: blur(40px);
     }
+
     .brand {
-      padding: 26px 24px 18px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 32px 24px 24px;
+      border-bottom: 1px solid rgba(16, 163, 127, 0.1);
       text-align: center;
       position: relative;
       z-index: 1;
+      background: linear-gradient(180deg, rgba(16, 163, 127, 0.05), transparent);
     }
+
     .brand-badge {
-      width: 74px;
-      height: 74px;
-      margin: 0 auto 14px;
-      border-radius: 24px;
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 18px;
+      border-radius: 28px;
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, rgba(16, 163, 127, 0.95), rgba(255, 209, 102, 0.9));
-      color: #09131f;
-      font-size: 2rem;
-      box-shadow: 0 14px 35px rgba(16, 163, 127, 0.25);
+      background: var(--gradient-primary);
+      color: #05070f;
+      font-size: 2.5rem;
+      box-shadow: 0 20px 50px rgba(16, 163, 127, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      animation: float 3s ease-in-out infinite;
     }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+    }
+
     .logo {
       margin: 0;
-      font-size: 2rem;
+      font-size: 2.2rem;
       font-weight: 900;
       line-height: 1.2;
-      background: linear-gradient(90deg, #7fffd4, #ffd166 55%, #fff);
+      background: var(--gradient-primary);
       -webkit-background-clip: text;
       background-clip: text;
-      color: transparent;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 1px;
     }
-    .brand small { display: block; margin-top: 8px; color: var(--muted); font-size: 0.85rem; }
-    .sidebar-tools, .tabs, .conversation-panel, .sidebar-footer { position: relative; z-index: 1; }
-    .sidebar-tools { padding: 14px 12px 8px; display: grid; gap: 10px; }
-    .sidebar-tool-row, .row { display: flex; gap: 10px; flex-wrap: wrap; }
-    .chip, .small-btn {
-      border: 1px solid rgba(255, 255, 255, 0.10);
-      background: rgba(255, 255, 255, 0.06);
-      color: #dfeaff;
-      border-radius: 999px;
-      padding: 9px 12px;
-      cursor: pointer;
-      font-size: 0.92rem;
-      transition: 0.22s ease;
-      white-space: nowrap;
-      font-family: inherit;
+
+    .brand small {
+      display: block;
+      margin-top: 10px;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
     }
-    .chip:hover, .small-btn:hover { background: rgba(255, 255, 255, 0.10); transform: translateY(-1px); }
-    .tabs { padding: 10px 12px 8px; display: grid; gap: 10px; }
+
+    .tabs {
+      padding: 14px 12px;
+      display: grid;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
     .tab-btn {
-      border: 1px solid transparent;
-      background: rgba(255, 255, 255, 0.05);
-      color: #d7e3f5;
-      padding: 16px 18px;
-      border-radius: 18px;
-      font-size: 1.02rem;
-      text-align: right;
-      cursor: pointer;
-      transition: 0.28s ease;
       display: flex;
       align-items: center;
       gap: 12px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+      padding: 14px 16px;
+      border: 1px solid rgba(16, 163, 127, 0.1);
+      background: rgba(16, 163, 127, 0.05);
+      color: var(--text-secondary);
+      border-radius: 14px;
+      cursor: pointer;
       font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      white-space: nowrap;
+      text-align: right;
     }
-    .tab-btn i { width: 22px; text-align: center; color: var(--gold); }
+
+    .tab-btn i {
+      width: 20px;
+      text-align: center;
+      color: var(--accent-gold);
+    }
+
+    .tab-btn:hover {
+      background: rgba(16, 163, 127, 0.12);
+      border-color: rgba(16, 163, 127, 0.2);
+      transform: translateX(-4px);
+    }
+
     .tab-btn.active {
-      background: linear-gradient(135deg, rgba(16, 163, 127, 0.28), rgba(255, 209, 102, 0.15));
-      border-color: rgba(255, 209, 102, 0.18);
-      box-shadow: 0 10px 30px rgba(16, 163, 127, 0.18);
-      color: #fff;
+      background: var(--gradient-dark);
+      border-color: rgba(16, 163, 127, 0.3);
+      color: var(--accent-cyan);
+      box-shadow: 0 0 20px rgba(16, 163, 127, 0.2);
     }
+
     .conversation-panel {
-      margin: 6px 12px 0;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 20px;
-      overflow: hidden;
+      flex: 1;
+      margin: 8px 12px;
       display: flex;
       flex-direction: column;
+      background: rgba(16, 163, 127, 0.04);
+      border: 1px solid rgba(16, 163, 127, 0.1);
+      border-radius: 18px;
+      overflow: hidden;
       min-height: 0;
-      flex: 1;
+      position: relative;
+      z-index: 1;
     }
+
     .conversation-head {
       padding: 14px 16px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(16, 163, 127, 0.1);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
-      font-size: 0.95rem;
       font-weight: 700;
+      color: var(--text-primary);
+      font-size: 0.95rem;
     }
-    .conversation-list { overflow: auto; padding: 10px; display: grid; gap: 8px; min-height: 0; }
+
+    .conversation-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px;
+      display: grid;
+      gap: 6px;
+      min-height: 0;
+    }
+
+    .conversation-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .conversation-list::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .conversation-list::-webkit-scrollbar-thumb {
+      background: rgba(16, 163, 127, 0.3);
+      border-radius: 3px;
+    }
+
     .conversation-item {
-      text-align: right;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 12px 14px;
+      border-radius: 12px;
       background: rgba(255, 255, 255, 0.04);
-      color: var(--text);
-      border-radius: 16px;
-      padding: 12px;
+      border: 1px solid rgba(16, 163, 127, 0.08);
+      color: var(--text-secondary);
       cursor: pointer;
-      transition: 0.2s ease;
-      font-size: 0.92rem;
+      transition: all 0.25s ease;
+      font-size: 0.9rem;
+      text-align: right;
     }
-    .conversation-item:hover { background: rgba(255, 255, 255, 0.08); }
-    .conversation-item.active { background: linear-gradient(135deg, rgba(16, 163, 127, 0.28), rgba(255, 209, 102, 0.15)); border-color: rgba(255, 209, 102, 0.22); }
-    .conversation-item .title { font-weight: 800; margin-bottom: 4px; }
-    .conversation-item .meta { color: var(--muted); font-size: 0.85rem; }
+
+    .conversation-item:hover {
+      background: rgba(16, 163, 127, 0.08);
+      border-color: rgba(16, 163, 127, 0.15);
+    }
+
+    .conversation-item.active {
+      background: var(--gradient-dark);
+      border-color: rgba(16, 163, 127, 0.3);
+      color: var(--accent-cyan);
+    }
+
+    .conversation-item .title {
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--text-primary);
+    }
+
+    .conversation-item .meta {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+    }
+
     .sidebar-footer {
       margin-top: auto;
-      padding: 16px 18px 22px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      color: rgba(234, 242, 255, 0.8);
+      padding: 16px;
+      border-top: 1px solid rgba(16, 163, 127, 0.1);
       text-align: center;
-      background: rgba(0, 0, 0, 0.10);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      background: rgba(16, 163, 127, 0.03);
+      position: relative;
+      z-index: 1;
+    }
+
+    .sidebar-footer strong {
+      color: var(--accent-cyan);
+      display: block;
+      margin-bottom: 6px;
       font-size: 0.9rem;
     }
-    .sidebar-footer strong { color: #fff; display: block; margin-bottom: 6px; font-size: 0.95rem; }
+
+    /* ===== MAIN CONTENT ===== */
     .main-content {
       flex: 1;
-      min-width: 0;
-      height: 100vh;
       display: flex;
       flex-direction: column;
-      background: rgba(0, 0, 0, 0.04);
-      backdrop-filter: blur(10px);
+      background: rgba(10, 14, 39, 0.4);
+      backdrop-filter: blur(12px);
+      min-width: 0;
     }
+
     .topbar {
-      padding: 18px 22px;
+      padding: 20px 28px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(8, 14, 27, 0.48);
+      border-bottom: 1px solid rgba(16, 163, 127, 0.1);
+      background: rgba(5, 7, 15, 0.5);
       backdrop-filter: blur(18px);
-      gap: 14px;
+      gap: 16px;
     }
-    .topbar h3 { margin: 0; font-size: 1.15rem; color: #fff; }
-    .topbar .hint { color: var(--muted); font-size: 0.92rem; }
-    .topbar .right { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
-    .panel { display: none; flex: 1; min-height: 0; flex-direction: column; }
-    .panel.active { display: flex; }
-    .panel-inner { padding: 22px; height: 100%; overflow: auto; }
-    .hero-card {
-      background: linear-gradient(135deg, rgba(16, 163, 127, 0.12), rgba(255, 209, 102, 0.08));
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 28px;
-      box-shadow: var(--shadow);
-      padding: 18px;
-      margin-bottom: 18px;
-    }
-    .hero-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 16px; }
-    .mini-stat {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 20px;
-      padding: 14px;
-      min-height: 92px;
-    }
-    .mini-stat .label { color: var(--muted); font-size: 0.9rem; }
-    .mini-stat .value { font-size: 1.04rem; font-weight: 800; margin-top: 8px; word-break: break-word; }
-    .card-shell { background: var(--panel); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 28px; box-shadow: var(--shadow); overflow: hidden; }
-    .section-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 18px 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(255, 255, 255, 0.02);
-    }
-    .section-head h3 { margin: 0; font-size: 1.05rem; }
-    .section-head .subtle { color: var(--muted); font-size: 0.92rem; }
-    .select, .input, textarea {
-      width: 100%;
-      border: 1px solid rgba(255, 255, 255, 0.10);
-      background: rgba(255, 255, 255, 0.06);
-      color: var(--text);
-      border-radius: 18px;
-      padding: 14px 16px;
-      outline: none;
-      transition: 0.25s ease;
-      font-family: inherit;
-      font-size: 0.95rem;
-    }
-    .select:focus, .input:focus, textarea:focus {
-      border-color: rgba(16, 163, 127, 0.55);
-      box-shadow: 0 0 0 4px rgba(16, 163, 127, 0.12);
-    }
-    textarea { resize: none; min-height: 58px; max-height: 240px; line-height: 1.8; }
-    .action-btn {
-      border: none;
-      cursor: pointer;
-      border-radius: 18px;
-      padding: 14px 18px;
-      font-family: inherit;
-      font-size: 1rem;
+
+    .topbar h2 {
+      margin: 0;
+      font-size: 1.4rem;
       font-weight: 800;
-      color: #08111b;
-      background: linear-gradient(135deg, var(--primary), var(--gold));
-      box-shadow: 0 16px 35px rgba(16, 163, 127, 0.18);
-      transition: 0.28s ease;
-      white-space: nowrap;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 0.5px;
     }
-    .action-btn:hover { transform: translateY(-1px); filter: brightness(1.03); }
-    .action-btn:disabled { opacity: 0.7; cursor: wait; transform: none; }
-    .ghost-btn { background: rgba(255, 255, 255, 0.08); color: #fff; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: none; font-weight: 700; }
-    .chat-messages { flex: 1; overflow-y: auto; padding: 22px; display: flex; flex-direction: column; gap: 14px; min-height: 0; }
-    .message { display: flex; gap: 14px; align-items: flex-end; animation: fadeInUp 0.28s ease; }
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-    .message-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 18px;
-      flex: 0 0 auto;
+
+    .topbar-right {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid rgba(16, 163, 127, 0.1);
+      background: rgba(16, 163, 127, 0.05);
+      color: var(--text-secondary);
+      cursor: pointer;
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, rgba(16, 163, 127, 1), rgba(255, 209, 102, 1));
-      color: #06101b;
-      font-size: 1.4rem;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
-      user-select: none;
+      transition: all 0.25s ease;
+      font-size: 1rem;
     }
-    .message.user { flex-direction: row-reverse; }
-    .message-content {
-      max-width: min(930px, 78%);
-      padding: 16px 18px;
-      border-radius: 22px 22px 8px 22px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      line-height: 1.9;
-      white-space: pre-wrap;
+
+    .icon-btn:hover {
+      background: rgba(16, 163, 127, 0.12);
+      border-color: rgba(16, 163, 127, 0.2);
+      color: var(--accent-cyan);
+    }
+
+    .panel {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .panel.active {
+      display: flex;
+    }
+
+    .panel-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      min-height: 0;
+    }
+
+    /* ===== CHAT PANEL ===== */
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      gap: 0;
+      min-height: 0;
+    }
+
+    .config-card {
+      background: var(--gradient-dark);
+      border: 1px solid rgba(16, 163, 127, 0.15);
+      border-radius: 18px;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      align-items: start;
+      box-shadow: var(--shadow-md);
+    }
+
+    .config-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .config-label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .select, .input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid rgba(16, 163, 127, 0.15);
+      background: rgba(16, 163, 127, 0.05);
+      color: var(--text-primary);
+      border-radius: 12px;
+      font-family: 'Cairo', inherit;
+      font-size: 0.95rem;
+      transition: all 0.25s ease;
+      outline: none;
+    }
+
+    .select:focus, .input:focus {
+      border-color: rgba(16, 163, 127, 0.4);
+      background: rgba(16, 163, 127, 0.08);
+      box-shadow: 0 0 0 3px rgba(16, 163, 127, 0.1);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .stat-box {
+      background: rgba(16, 163, 127, 0.04);
+      border: 1px solid rgba(16, 163, 127, 0.1);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--accent-cyan);
       word-break: break-word;
+    }
+
+    .chat-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: rgba(10, 14, 39, 0.6);
+      border-radius: 18px;
+      border: 1px solid rgba(16, 163, 127, 0.1);
+      overflow: hidden;
+      min-height: 0;
+      margin-top: 12px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-height: 0;
+    }
+
+    .messages::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .messages::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .messages::-webkit-scrollbar-thumb {
+      background: rgba(16, 163, 127, 0.25);
+      border-radius: 4px;
+    }
+
+    .message {
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+      animation: slideIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .message.user {
+      flex-direction: row-reverse;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      background: var(--gradient-primary);
+      color: #05070f;
+      box-shadow: var(--shadow-md);
+    }
+
+    .message.user .avatar {
+      background: linear-gradient(135deg, #10a37f, #00d9ff);
+    }
+
+    .bubble {
+      max-width: 65%;
+      padding: 14px 18px;
+      border-radius: 18px;
+      background: rgba(16, 163, 127, 0.08);
+      border: 1px solid rgba(16, 163, 127, 0.15);
+      color: var(--text-primary);
+      line-height: 1.6;
+      font-size: 0.95rem;
+      word-wrap: break-word;
       overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .message.user .bubble {
+      background: linear-gradient(135deg, rgba(16, 163, 127, 0.3), rgba(0, 217, 255, 0.15));
+      border: 1px solid rgba(16, 163, 127, 0.2);
+      color: var(--text-primary);
+    }
+
+    .composer {
+      padding: 20px;
+      border-top: 1px solid rgba(16, 163, 127, 0.1);
+      background: rgba(5, 7, 15, 0.8);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .quick-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .quick-btn {
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(16, 163, 127, 0.15);
+      background: rgba(16, 163, 127, 0.05);
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.25s ease;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+
+    .quick-btn:hover {
+      background: rgba(16, 163, 127, 0.12);
+      border-color: rgba(16, 163, 127, 0.2);
+      color: var(--accent-cyan);
+    }
+
+    .input-area {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 10px;
+      align-items: flex-end;
+    }
+
+    textarea {
+      padding: 14px 16px;
+      border: 1px solid rgba(16, 163, 127, 0.15);
+      background: rgba(16, 163, 127, 0.05);
+      color: var(--text-primary);
+      border-radius: 12px;
+      font-family: 'Cairo', inherit;
+      font-size: 0.95rem;
+      resize: none;
+      max-height: 120px;
+      min-height: 50px;
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    textarea:focus {
+      border-color: rgba(16, 163, 127, 0.4);
+      background: rgba(16, 163, 127, 0.08);
+    }
+
+    .send-btn {
+      padding: 12px 18px;
+      border: none;
+      border-radius: 12px;
+      background: var(--gradient-primary);
+      color: #05070f;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-md);
+      font-family: inherit;
       font-size: 0.95rem;
     }
-    .message.user .message-content { border-radius: 22px 22px 22px 8px; background: linear-gradient(135deg, rgba(16, 163, 127, 0.95), rgba(13, 143, 107, 0.96)); color: #fff; border-color: rgba(255, 255, 255, 0.05); }
-    .img-preview, .web-image { width: 100%; max-width: 100%; border-radius: 18px; margin-top: 10px; border: 1px solid rgba(255, 255, 255, 0.12); cursor: zoom-in; display: block; }
-    .composer { padding: 18px 22px 22px; border-top: 1px solid rgba(255, 255, 255, 0.08); background: rgba(7, 15, 28, 0.84); backdrop-filter: blur(18px); }
-    .composer-row { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: end; }
-    .composer-tools { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
-    .attachment-box {
-      margin-top: 10px;
-      padding: 12px;
-      border-radius: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.10);
-      background: rgba(255, 255, 255, 0.05);
-      display: none;
-      gap: 12px;
-      align-items: center;
-      justify-content: space-between;
+
+    .send-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(16, 163, 127, 0.3);
     }
-    .attachment-box.active { display: flex; }
-    .attachment-preview { width: 72px; height: 72px; border-radius: 16px; object-fit: cover; border: 1px solid rgba(255, 255, 255, 0.12); flex: 0 0 auto; }
-    .attachment-meta { flex: 1; min-width: 0; }
-    .attachment-meta .title { font-weight: 800; }
-    .attachment-meta .sub { color: var(--muted); font-size: 0.9rem; word-break: break-word; }
-    .grid-2 { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 18px; }
-    .box { padding: 18px; }
-    .search-results, .settings-box, .image-box { min-height: 320px; }
-    .result-item {
-      padding: 14px 14px 12px;
-      border-radius: 16px;
-      margin-bottom: 12px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      font-size: 0.92rem;
+
+    .send-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
-    .result-item strong { color: #fff; }
-    .result-item small { color: var(--muted); line-height: 1.8; display: block; margin-top: 6px; }
-    .status {
-      margin-top: 12px;
+
+    .voice-btn {
       padding: 12px 14px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: var(--muted);
-      line-height: 1.8;
-      word-break: break-word;
-      overflow-wrap: anywhere;
-      font-size: 0.9rem;
+      border: 1px solid rgba(16, 163, 127, 0.15);
+      background: rgba(16, 163, 127, 0.05);
+      border-radius: 12px;
+      color: var(--accent-gold);
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: all 0.25s ease;
     }
-    .status.good { color: #8ff3d2; border-color: rgba(16, 163, 127, 0.25); }
-    .status.bad { color: #ffb4b4; border-color: rgba(255, 107, 107, 0.28); }
-    .status.warn { color: #ffdca0; border-color: rgba(255, 209, 102, 0.25); }
-    .empty-state { padding: 22px; text-align: center; color: var(--muted); border: 1px dashed rgba(255, 255, 255, 0.12); border-radius: 18px; background: rgba(255, 255, 255, 0.03); }
-    .hidden { display: none !important; }
-    .loader { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); }
-    .spinner { display: inline-flex; align-items: center; gap: 10px; }
-    .pulse { width: 10px; height: 10px; border-radius: 50%; background: var(--gold); animation: pulse 1.2s infinite; }
-    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 209, 102, 0.55); } 70% { box-shadow: 0 0 0 12px rgba(255, 209, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 209, 102, 0); } }
-    .spacer { height: 12px; }
-    .voice-btn { padding: 12px 14px; font-size: 1.2rem; }
-    .voice-btn.recording { background: rgba(255, 100, 100, 0.3); border-color: rgba(255, 100, 100, 0.5); }
-    .music-toggle { position: fixed; bottom: 30px; right: 30px; z-index: 10; width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--gold)); border: none; cursor: pointer; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; transition: 0.3s ease; }
-    .music-toggle:hover { transform: scale(1.1); }
-    .music-toggle.playing { animation: pulse-music 1.5s infinite; }
-    @keyframes pulse-music { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
-    @media (max-width: 1180px) {
+
+    .voice-btn:hover {
+      background: rgba(16, 163, 127, 0.12);
+      border-color: rgba(16, 163, 127, 0.2);
+    }
+
+    /* ===== MUSIC BUTTON ===== */
+    .music-toggle {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 10;
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      background: var(--gradient-primary);
+      border: none;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      font-size: 2rem;
+      box-shadow: var(--shadow-lg);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      color: #05070f;
+      font-weight: 900;
+    }
+
+    .music-toggle:hover {
+      transform: scale(1.15);
+      box-shadow: 0 15px 40px rgba(16, 163, 127, 0.4);
+    }
+
+    .music-toggle.playing {
+      animation: pulse-btn 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse-btn {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1200px) {
       .sidebar { width: 320px; min-width: 320px; }
-      .hero-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .grid-2 { grid-template-columns: 1fr; }
-      .message-content { max-width: 86%; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .bubble { max-width: 75%; }
+      .config-card { grid-template-columns: 1fr; }
     }
+
     @media (max-width: 860px) {
-      body { overflow: auto; }
-      .app { flex-direction: column; height: auto; min-height: 100vh; }
-      .sidebar { width: 100%; min-width: 0; height: auto; position: sticky; top: 0; z-index: 5; }
-      .conversation-panel { max-height: 220px; }
+      .app { flex-direction: column; }
+      .sidebar { width: 100%; min-width: 0; height: auto; }
+      .conversation-panel { max-height: 200px; }
       .main-content { height: auto; min-height: 100vh; }
       .panel { min-height: 100vh; }
-      .composer-row { grid-template-columns: 1fr; }
-      .message-content { max-width: 100%; }
       .topbar { flex-direction: column; align-items: stretch; }
-      .topbar .right { justify-content: flex-start; }
+      .bubble { max-width: 100%; }
+      .input-area { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
     }
+
+    .hidden { display: none !important; }
+    .spinner { display: inline-flex; gap: 8px; align-items: center; }
+    .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-gold); animation: pulse 1.2s infinite; }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 209, 102, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 209, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 209, 102, 0); } }
   </style>
 </head>
 <body>
   <div class="wallpaper"></div>
   <div class="overlay"></div>
+
   <div class="app">
+    <!-- SIDEBAR -->
     <aside class="sidebar">
       <div class="brand">
         <div class="brand-badge">🦅</div>
         <h1 class="logo">المصري الذكي</h1>
-        <small>النسخة الخرافية v3.0 | مع صوت + موسيقى + قيود</small>
+        <small>النسخة الفخمة v4.0 | مع صوت + موسيقى + أمان 🎵</small>
       </div>
-      <div class="sidebar-tools">
-        <div class="sidebar-tool-row">
-          <button class="small-btn" id="newChatBtn"><i class="fas fa-plus"></i> محادثة</button>
-          <button class="small-btn" id="exportChatsBtn"><i class="fas fa-download"></i> تصدير</button>
-          <button class="small-btn" id="importChatsBtn"><i class="fas fa-upload"></i> استيراد</button>
-        </div>
-      </div>
+
       <div class="tabs">
-        <button class="tab-btn active" data-tab="chat"><i class="fas fa-comments"></i><span>دردشة</span></button>
-        <button class="tab-btn" data-tab="search"><i class="fas fa-magnifying-glass"></i><span>بحث</span></button>
-        <button class="tab-btn" data-tab="image"><i class="fas fa-wand-magic-sparkles"></i><span>صور</span></button>
-        <button class="tab-btn" data-tab="settings"><i class="fas fa-gear"></i><span>الإعدادات</span></button>
+        <button class="tab-btn active" data-tab="chat">
+          <i class="fas fa-comments"></i>
+          <span>دردشة ذكية</span>
+        </button>
+        <button class="tab-btn" data-tab="search">
+          <i class="fas fa-magnifying-glass"></i>
+          <span>بحث عميق</span>
+        </button>
+        <button class="tab-btn" data-tab="image">
+          <i class="fas fa-palette"></i>
+          <span>صور</span>
+        </button>
+        <button class="tab-btn" data-tab="settings">
+          <i class="fas fa-sliders"></i>
+          <span>الإعدادات</span>
+        </button>
       </div>
+
       <div class="conversation-panel">
         <div class="conversation-head">
-          <button class="small-btn" id="clearAllChatsBtn" title="مسح المحادثات"><i class="fas fa-broom"></i></button>
-          <strong>المحفوظة</strong>
+          <button class="icon-btn" id="clearAllChatsBtn" title="مسح المحادثات">
+            <i class="fas fa-broom"></i>
+          </button>
+          <span>المحفوظة</span>
         </div>
         <div id="conversationList" class="conversation-list"></div>
       </div>
+
       <div class="sidebar-footer">
         <strong>🚀 مطور البرنامج</strong>
         <div>محمد رجب عبد المنعم</div>
-        <div style="font-size: 0.8rem; margin-top: 6px; color: #7fffd4;">Engineer Mohamed Ragab Abdelmonem</div>
+        <div>Engineer Mohamed Ragab 💚</div>
       </div>
     </aside>
+
+    <!-- MAIN CONTENT -->
     <main class="main-content">
       <div class="topbar">
-        <div>
-          <h3 id="panelTitle">🦅 دردشة ذكية</h3>
-          <div class="hint" id="panelHint">ابدأ من هنا.</div>
-        </div>
-        <div class="right">
-          <button class="chip" id="bgPrevBtn"><i class="fas fa-arrow-right"></i> سابق</button>
-          <button class="chip" id="bgNextBtn"><i class="fas fa-arrow-left"></i> التالي</button>
-          <button class="chip" id="bgAutoBtn"><i class="fas fa-rotate"></i> خلفية</button>
-          <button class="chip" id="newChatTopBtn"><i class="fas fa-plus"></i> شات جديد</button>
-          <button class="chip" id="clearChatBtn"><i class="fas fa-trash"></i> مسح</button>
+        <h2 id="panelTitle">🦅 دردشة ذكية</h2>
+        <div class="topbar-right">
+          <button class="icon-btn" id="bgPrevBtn" title="الخلفية السابقة">
+            <i class="fas fa-arrow-right"></i>
+          </button>
+          <button class="icon-btn" id="bgNextBtn" title="الخلفية التالية">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <button class="icon-btn" id="bgAutoBtn" title="خلفيات تلقائية">
+            <i class="fas fa-rotate"></i>
+          </button>
+          <button class="icon-btn" id="newChatBtn" title="محادثة جديدة">
+            <i class="fas fa-plus"></i>
+          </button>
+          <button class="icon-btn" id="clearChatBtn" title="مسح المحادثة">
+            <i class="fas fa-trash"></i>
+          </button>
         </div>
       </div>
 
       <!-- Chat Panel -->
       <section id="chat" class="panel active">
-        <div class="panel-inner" style="padding:0;display:flex;flex-direction:column;min-height:0;">
-          <div class="hero-card" style="margin:22px 22px 0;">
-            <div class="row" style="justify-content:space-between;align-items:center;">
+        <div class="chat-container" style="padding: 0; margin: 0; display: flex;">
+          <div class="panel-content" style="padding: 20px 28px; flex: 0 0 auto; gap: 12px;">
+            <div class="config-card">
               <div>
-                <div class="muted">إعدادات الدردشة</div>
-                <div style="font-size:1.1rem;font-weight:800;margin-top:4px;">موديلات + صوت + موسيقى</div>
-              </div>
-              <div style="min-width:320px;width:min(100%,480px);display:grid;gap:10px;">
+                <div class="config-label">📡 مزود الخدمة</div>
                 <select id="providerSelect" class="select"></select>
+                <div class="config-label" style="margin-top: 12px;">🎯 نمط التشغيل</div>
                 <select id="routingModeSelect" class="select">
                   <option value="auto">🤖 تلقائي ذكي (Fallback)</option>
                   <option value="manual">🎯 موديل محدد</option>
                 </select>
+              </div>
+              <div>
+                <div class="config-label">🧠 النموذج الذكي</div>
                 <select id="modelSelect" class="select"></select>
+                <div class="config-label" style="margin-top: 12px;">⚙️ خيارات</div>
+                <div class="quick-buttons">
+                  <button class="quick-btn" id="exportBtn"><i class="fas fa-download"></i> تصدير</button>
+                  <button class="quick-btn" id="importBtn"><i class="fas fa-upload"></i> استيراد</button>
+                </div>
               </div>
             </div>
-            <div class="hero-grid">
-              <div class="mini-stat"><div class="label">🔑 المفتاح</div><div class="value" id="keyState">—</div></div>
-              <div class="mini-stat"><div class="label">🤖 الموديل</div><div class="value" id="modelState">—</div></div>
-              <div class="mini-stat"><div class="label">⚡ الحالة</div><div class="value" id="apiState">—</div></div>
-              <div class="mini-stat"><div class="label">💬 الرسائل</div><div class="value" id="chatState">—</div></div>
+
+            <div class="stats-grid">
+              <div class="stat-box">
+                <div class="stat-label">🔑 المفتاح</div>
+                <div class="stat-value" id="keyState">—</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-label">🤖 الموديل</div>
+                <div class="stat-value" id="modelState" style="font-size: 0.9rem; overflow: hidden;">—</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-label">⚡ الحالة</div>
+                <div class="stat-value" id="apiState">—</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-label">💬 الرسائل</div>
+                <div class="stat-value" id="chatState">—</div>
+              </div>
             </div>
           </div>
-          <div id="chatMessages" class="chat-messages"></div>
-          <div class="composer">
-            <div class="composer-tools">
-              <button class="chip" data-fill="اشرح لي هذا ببساطة جدًا 📝">شرح بسيط</button>
-              <button class="chip" data-fill="اكتب لي كود احترافي ونظيف 💻">كود محترف</button>
-              <button class="chip" data-fill="راجع الكود واكتشف الأخطاء 🔍">مراجعة كود</button>
-              <button class="chip" data-fill="حوّل الفكرة لواجهة فخمة جدًا ✨">واجهة فخمة</button>
-              <button class="chip" id="attachImageBtn"><i class="fas fa-paperclip"></i> صورة</button>
-              <button class="chip" id="clearAttachmentBtn"><i class="fas fa-xmark"></i> حذف</button>
-            </div>
-            <div id="attachmentBox" class="attachment-box">
-              <img id="attachmentPreview" class="attachment-preview" alt="attachment" />
-              <div class="attachment-meta">
-                <div class="title" id="attachmentTitle">صورة مرفقة</div>
-                <div class="sub">جاهزة للفحص 🔍</div>
+
+          <div class="chat-area">
+            <div class="messages" id="chatMessages"></div>
+            <div class="composer">
+              <div class="quick-buttons">
+                <button class="quick-btn" data-fill="اشرح لي هذا ببساطة جدًا 📝">شرح بسيط</button>
+                <button class="quick-btn" data-fill="اكتب كود احترافي ونظيف 💻">كود محترف</button>
+                <button class="quick-btn" data-fill="راجع الكود واكتشف الأخطاء 🔍">مراجعة</button>
+                <button class="quick-btn" data-fill="حوّل الفكرة لواجهة فخمة ✨">واجهة فخمة</button>
               </div>
-            </div>
-            <div class="composer-row" style="margin-top:12px;">
-              <textarea id="chatInput" rows="2" placeholder="اكتب رسالتك... (Enter للإرسال / Shift+Enter سطر جديد)"></textarea>
-              <button id="textToSpeechBtn" class="action-btn voice-btn" title="اقرأ الرسالة"><i class="fas fa-volume-up"></i></button>
-              <button id="sendBtn" class="action-btn"><i class="fas fa-paper-plane"></i> إرسال</button>
+              <div class="input-area">
+                <textarea id="chatInput" placeholder="اكتب رسالتك... (Enter للإرسال / Shift+Enter سطر جديد)"></textarea>
+                <button id="textToSpeechBtn" class="voice-btn" title="اقرأ الرسالة">
+                  <i class="fas fa-volume-up"></i>
+                </button>
+                <button id="sendBtn" class="send-btn">
+                  <i class="fas fa-paper-plane"></i>
+                  <span>إرسال</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -500,30 +855,19 @@
 
       <!-- Search Panel -->
       <section id="search" class="panel">
-        <div class="panel-inner">
-          <div class="grid-2">
-            <div class="card-shell">
-              <div class="section-head">
-                <div>
-                  <h3><i class="fas fa-magnifying-glass"></i> بحث عميق</h3>
-                  <div class="subtle">ويكيبيديا + صور + جوجل مباشر</div>
-                </div>
-              </div>
-              <div class="box">
-                <input id="searchInput" class="input" placeholder="ابحث عن أي شيء..." />
-                <div class="spacer"></div>
-                <div class="row">
-                  <button id="searchBtn" class="action-btn"><i class="fas fa-magnifying-glass"></i> بحث</button>
-                  <button id="googleSearchBtn" class="action-btn ghost-btn"><i class="fab fa-google"></i> جوجل</button>
-                  <button id="searchClearBtn" class="action-btn ghost-btn"><i class="fas fa-eraser"></i> مسح</button>
-                </div>
+        <div class="panel-content">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+            <div style="background: var(--gradient-dark); border: 1px solid rgba(16, 163, 127, 0.15); border-radius: 18px; padding: 20px;">
+              <h3 style="margin-bottom: 16px; color: var(--accent-cyan);">🔎 بحث عميق</h3>
+              <input id="searchInput" class="input" placeholder="ابحث عن أي شيء..." />
+              <div style="margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <button id="searchBtn" class="send-btn" style="width: 100%;">بحث</button>
+                <button id="googleSearchBtn" class="send-btn" style="width: 100%; background: linear-gradient(135deg, #ea4335, #fbbc04);">جوجل</button>
               </div>
             </div>
-            <div class="card-shell search-results">
-              <div class="section-head">
-                <h3><i class="fas fa-layer-group"></i> النتائج</h3>
-              </div>
-              <div id="searchResults" class="box muted">ابدأ بالبحث...</div>
+            <div style="background: var(--gradient-dark); border: 1px solid rgba(16, 163, 127, 0.15); border-radius: 18px; padding: 20px;">
+              <h3 style="margin-bottom: 16px; color: var(--accent-cyan);">📋 النتائج</h3>
+              <div id="searchResults" style="min-height: 300px; color: var(--text-secondary); padding: 20px; background: rgba(16, 163, 127, 0.04); border-radius: 12px;">ابدأ بالبحث...</div>
             </div>
           </div>
         </div>
@@ -531,30 +875,19 @@
 
       <!-- Image Panel -->
       <section id="image" class="panel">
-        <div class="panel-inner">
-          <div class="grid-2">
-            <div class="card-shell">
-              <div class="section-head">
-                <div>
-                  <h3><i class="fas fa-palette"></i> الصور الذكية</h3>
-                  <div class="subtle">رسم + بحث + فحص صور</div>
-                </div>
-              </div>
-              <div class="box">
-                <input id="imagePrompt" class="input" placeholder="اكتب وصف الصورة المطلوبة..." />
-                <div class="spacer"></div>
-                <div class="row">
-                  <button id="genBtn" class="action-btn"><i class="fas fa-wand-magic-sparkles"></i> ارسم</button>
-                  <button id="webImageBtn" class="action-btn ghost-btn"><i class="fas fa-globe"></i> بحث</button>
-                  <button id="samplePromptBtn" class="action-btn ghost-btn"><i class="fas fa-star"></i> مثال</button>
-                </div>
+        <div class="panel-content">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+            <div style="background: var(--gradient-dark); border: 1px solid rgba(16, 163, 127, 0.15); border-radius: 18px; padding: 20px;">
+              <h3 style="margin-bottom: 16px; color: var(--accent-cyan);">🎨 الصور الذكية</h3>
+              <input id="imagePrompt" class="input" placeholder="اكتب وصف الصورة..." />
+              <div style="margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <button id="genBtn" class="send-btn" style="width: 100%;">ارسم</button>
+                <button id="samplePromptBtn" class="send-btn" style="width: 100%; background: linear-gradient(135deg, #ffd166, #ff9500);">مثال</button>
               </div>
             </div>
-            <div class="card-shell image-box">
-              <div class="section-head">
-                <h3><i class="fas fa-image"></i> المعاينة</h3>
-              </div>
-              <div id="imageResult" class="box muted">لا توجد صورة بعد...</div>
+            <div style="background: var(--gradient-dark); border: 1px solid rgba(16, 163, 127, 0.15); border-radius: 18px; padding: 20px;">
+              <h3 style="margin-bottom: 16px; color: var(--accent-cyan);">🖼️ المعاينة</h3>
+              <div id="imageResult" style="min-height: 300px; background: rgba(16, 163, 127, 0.04); border-radius: 12px; display: grid; place-items: center; color: var(--text-secondary);">لا توجد صورة بعد...</div>
             </div>
           </div>
         </div>
@@ -562,55 +895,50 @@
 
       <!-- Settings Panel -->
       <section id="settings" class="panel">
-        <div class="panel-inner">
-          <div class="grid-2">
-            <div class="card-shell settings-box">
-              <div class="section-head">
-                <div>
-                  <h3><i class="fas fa-key"></i> المفاتيح</h3>
-                  <div class="subtle">Groq + OpenAI + DeepSeek + Cohere</div>
-                </div>
+        <div class="panel-content">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+            <div style="background: var(--gradient-dark); border: 1px solid rgba(16, 163, 127, 0.15); border-radius: 18px; padding: 20px;">
+              <h3 style="margin-bottom: 16px; color: var(--accent-cyan);">🔑 API Keys</h3>
+              <label class="config-label">Groq API</label>
+              <input type="password" id="groqKeyInput" class="input" placeholder="gsk_..." style="margin-bottom: 12px;" />
+              
+              <label class="config-label">OpenAI API</label>
+              <input type="password" id="openaiKeyInput" class="input" placeholder="sk-..." style="margin-bottom: 12px;" />
+              
+              <label class="config-label">DeepSeek API</label>
+              <input type="password" id="deepseekKeyInput" class="input" placeholder="sk-..." style="margin-bottom: 12px;" />
+              
+              <label class="config-label">Cohere API</label>
+              <input type="password" id="cohereKeyInput" class="input" placeholder="..." style="margin-bottom: 12px;" />
+              
+              <label class="config-label">Claude API (Anthropic)</label>
+              <input type="password" id="claudeKeyInput" class="input" placeholder="sk-ant-..." style="margin-bottom: 12px;" />
+              
+              <label class="config-label">CoPilot API</label>
+              <input type="password" id="copilotKeyInput" class="input" placeholder="..." style="margin-bottom: 12px;" />
+              
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px;">
+                <button id="saveKeysBtn" class="send-btn">حفظ</button>
+                <button id="testKeyBtn" class="send-btn" style="background: linear-gradient(135deg, #ffd166, #ff9500);">اختبار</button>
               </div>
-              <div class="box">
-                <label class="muted">🔑 Groq API Key</label>
-                <input type="password" id="groqKeyInput" class="input" placeholder="gsk_..." autocomplete="off" />
-                <div class="spacer"></div>
-                <label class="muted">🔑 OpenAI API Key</label>
-                <input type="password" id="openaiKeyInput" class="input" placeholder="sk-..." autocomplete="off" />
-                <div class="spacer"></div>
-                <label class="muted">🔑 DeepSeek API Key</label>
-                <input type="password" id="deepseekKeyInput" class="input" placeholder="sk-..." autocomplete="off" />
-                <div class="spacer"></div>
-                <label class="muted">🔑 Cohere API Key</label>
-                <input type="password" id="cohereKeyInput" class="input" placeholder="..." autocomplete="off" />
-                <div class="spacer"></div>
-                <div class="row">
-                  <button id="saveKeysBtn" class="action-btn"><i class="fas fa-floppy-disk"></i> حفظ</button>
-                  <button id="toggleKeysBtn" class="action-btn ghost-btn"><i class="fas fa-eye"></i> عرض</button>
-                  <button id="testKeyBtn" class="action-btn ghost-btn"><i class="fas fa-bolt"></i> اختبار</button>
-                </div>
-                <div id="keyStatus" class="status warn">المفاتيح غير محفوظة</div>
-              </div>
+              <div id="keyStatus" style="margin-top: 12px; padding: 12px; border-radius: 10px; background: rgba(255, 107, 107, 0.1); border: 1px solid rgba(255, 107, 107, 0.2); color: #ffb4b4; font-size: 0.85rem;">المفاتيح غير محفوظة</div>
             </div>
-            <div class="card-shell">
-              <div class="section-head">
-                <div>
-                  <h3><i class="fas fa-circle-info"></i> إعدادات متقدمة</h3>
-                  <div class="subtle">الموديلات والمحادثات والخلفيات</div>
-                </div>
-              </div>
-              <div class="box">
-                <label class="muted">📝 اسم المحادثة</label>
-                <input id="chatTitleInput" class="input" placeholder="عنوان المحادثة الحالية" />
-                <div class="spacer"></div>
-                <button id="saveTitleBtn" class="action-btn"><i class="fas fa-floppy-disk"></i> حفظ</button>
-                <div class="spacer"></div>
-                <label class="muted">🤖 موديلات مخصصة (مفصولة بفواصل)</label>
-                <input id="customModelInput" class="input" placeholder="أضف موديل ID مخصص" />
-                <div class="spacer"></div>
-                <textarea id="modelNotes" class="input" readonly style="min-height:180px;resize:none;"></textarea>
-                <div class="spacer"></div>
-                <button id="exportOneBtn" class="action-btn ghost-btn"><i class="fas fa-download"></i> تصدير المحادثة</button>
+
+            <div style="background: var(--gradient-dark); border: 1px solid rgba(16, 163, 127, 0.15); border-radius: 18px; padding: 20px;">
+              <h3 style="margin-bottom: 16px; color: var(--accent-cyan);">⚙️ إعدادات متقدمة</h3>
+              <label class="config-label">📝 اسم المحادثة</label>
+              <input id="chatTitleInput" class="input" placeholder="عنوان المحادثة" style="margin-bottom: 12px;" />
+              <button id="saveTitleBtn" class="send-btn" style="width: 100%; margin-bottom: 12px;">حفظ</button>
+
+              <label class="config-label">🤖 موديلات مخصصة</label>
+              <input id="customModelInput" class="input" placeholder="مفصولة بفواصل" style="margin-bottom: 12px;" />
+              
+              <label class="config-label" style="margin-top: 12px;">📋 معلومات الموديلات</label>
+              <textarea id="modelNotes" style="width: 100%; height: 120px; padding: 12px; border-radius: 10px; background: rgba(16, 163, 127, 0.04); border: 1px solid rgba(16, 163, 127, 0.1); color: var(--text-secondary); font-family: monospace; font-size: 0.85rem; resize: none;" readonly></textarea>
+              
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px;">
+                <button id="exportOneBtn" class="send-btn">تصدير</button>
+                <button class="send-btn" id="toggleKeysBtn" style="background: linear-gradient(135deg, #ffd166, #ff9500);">عرض/إخفاء</button>
               </div>
             </div>
           </div>
@@ -619,952 +947,17 @@
     </main>
   </div>
 
-  <!-- Music Button -->
+  <!-- Music Toggle Button -->
   <button id="musicToggle" class="music-toggle" title="تشغيل/إيقاف الموسيقى">🎵</button>
 
+  <!-- Hidden Inputs -->
   <input type="file" id="importFileInput" accept="application/json" class="hidden" />
   <input type="file" id="imageFileInput" accept="image/*" class="hidden" />
-  <audio id="musicPlayer" preload="auto" loop></audio>
 
-  <script>
-    // ====== MUSIC URL (موسيقى رومانسية خفيفة من Bensound) ======
-    const ROMANTIC_MUSIC = 'https://www.bensound.com/bensound-music/bensound-ukulele.mp3';
+  <!-- Audio will be loaded from external module -->
+  <script src="audio-module.js"></script>
 
-    // ====== STORAGE KEYS ======
-    const STORAGE = {
-      groqKey: 'groq_key_ultimate',
-      openaiKey: 'openai_key_ultimate',
-      deepseekKey: 'deepseek_key_ultimate',
-      cohereKey: 'cohere_key_ultimate',
-      provider: 'provider_ultimate',
-      model: 'model_ultimate',
-      chats: 'chats_ultimate',
-      activeChat: 'active_chat_ultimate',
-      customModels: 'custom_models_ultimate',
-      routingMode: 'routing_mode_ultimate',
-      backgroundIndex: 'bg_index_ultimate',
-      autoBg: 'auto_bg_ultimate',
-      musicEnabled: 'music_enabled_ultimate'
-    };
-
-    // ====== BACKGROUNDS ======
-    const NATURE_BACKGROUNDS = [
-      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80',
-      'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1920&q=80',
-      'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1920&q=80',
-      'https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=1920&q=80',
-      'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1920&q=80',
-      'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1920&q=80'
-    ];
-
-    // ====== PROVIDERS & MODELS (كل النمازج المشهورة) ======
-    const PROVIDERS = {
-      groq: {
-        label: '🚀 Groq (سريع جدًا)',
-        endpoint: 'https://api.groq.com/openai/v1/chat/completions',
-        keyField: 'groqKey',
-        models: [
-          'llama-3.3-70b-versatile',
-          'llama-3.1-70b-versatile',
-          'llama-3.1-8b-instant',
-          'mixtral-8x7b-32768',
-          'qwen-qwq-32b',
-          'llama-guard-3-8b'
-        ]
-      },
-      openai: {
-        label: '🌟 OpenAI / ChatGPT',
-        endpoint: 'https://api.openai.com/v1/chat/completions',
-        keyField: 'openaiKey',
-        models: [
-          'gpt-4o',
-          'gpt-4o-mini',
-          'gpt-4-turbo',
-          'gpt-4',
-          'gpt-3.5-turbo'
-        ]
-      },
-      deepseek: {
-        label: '🔮 DeepSeek (ذكي جدًا)',
-        endpoint: 'https://api.deepseek.com/chat/completions',
-        keyField: 'deepseekKey',
-        models: [
-          'deepseek-chat',
-          'deepseek-coder',
-          'deepseek-reasoner'
-        ]
-      },
-      cohere: {
-        label: '🎯 Cohere (دقيق)',
-        endpoint: 'https://api.cohere.ai/v1/chat',
-        keyField: 'cohereKey',
-        models: [
-          'command-r-plus',
-          'command-r',
-          'command-light'
-        ]
-      }
-    };
-
-    const DEFAULT_PROVIDER = 'groq';
-    const DEFAULT_MODEL = 'llama-3.3-70b-versatile';
-
-    // ====== SAFETY FILTERS (القيود والأمان) ======
-    const UNSAFE_KEYWORDS = [
-      'hack', 'crack', 'exploit', 'malware', 'virus', 'ddos', 'decrypt', 'bypass',
-      'سلاح', 'انفجار', 'مخدر', 'قتل', 'اختراق', 'غش', 'احتيال', 'الإرهاب',
-      'كيف أصنع قنبلة', 'كيف أقتل', 'كيفية الاختراق', 'سم', 'مواد خطيرة'
-    ];
-
-    const SYSTEM_PROMPT = `أنت مساعد عربي احترافي، ذكي ومفيد. مطورك هو محمد رجب عبد المنعم (Engineer Mohamed Ragab Abdelmonem).
-
-قواعد مهمة:
-1. لو سألك: "مين طورك؟" أو "who developed you؟" رد بالإنجليزية والعربية:
-   "I was developed by Engineer Mohamed Ragab Abdelmonem"
-   وأضف بالعربية: "هو اللي طورني وبيساعد في تدريبي وحاطط القيود الأخلاقية"
-
-2. لو السؤال غير آمن أو سيء (اختراق، قتل، أسلحة): 
-   قول: "معي قيود أخلاقية من المطور وأنا رافض أتكلم في الموضوع ده 🚫"
-
-3. اكتب بالعربية الطبيعية الواضحة والمفيدة.
-4. لو يوجد صورة افحصها بدقة.`;
-
-    const START_MESSAGE = '✨ أهلًا يا محمد!\n🦅 دي النسخة الخرافية مع:\n✅ Fallback ذكي\n✅ صوت (TTS)\n✅ موسيقى رومانسية خفيفة\n✅ قيود أخلاقية آمنة\n✅ DeepSeek + Cohere + كل النمازج\n\nاكتب أي شيء يا بطل! 💪';
-
-    // ====== UTILITIES ======
-    function safeJSONParse(value, fallback) { try { return JSON.parse(value); } catch { return fallback; } }
-    function uid() { return crypto?.randomUUID ? crypto.randomUUID() : `chat_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`; }
-    function escapeHTML(str) { return String(str).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;'); }
-    function formatText(text) { return escapeHTML(text).replace(/\n/g, '<br>'); }
-    function timeLabel(ts) { return new Date(ts).toLocaleString('ar-EG', { dateStyle: 'short', timeStyle: 'short' }); }
-    function normalizeList(list) { return [...new Set((list || []).map(s => String(s).trim()).filter(Boolean))]; }
-
-    // ====== SAFETY CHECK ======
-    function isSafeContent(text) {
-      const t = (text || '').toLowerCase();
-      for (const keyword of UNSAFE_KEYWORDS) {
-        if (t.includes(keyword.toLowerCase())) return false;
-      }
-      return true;
-    }
-
-    function blockMessage(text) {
-      if (!isSafeContent(text)) {
-        return '🚫 معي قيود أخلاقية من المطور محمد رجب عبد المنعم وأنا رافض أتكلم في الموضوع ده. البرنامج آمن وحامي! 💚';
-      }
-      return null;
-    }
-
-    // ====== CHAT STATE ======
-    function makeNewChat(title = 'محادثة جديدة', model = DEFAULT_MODEL, provider = DEFAULT_PROVIDER) {
-      return {
-        id: uid(),
-        title,
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-        model,
-        provider,
-        messages: [{ role: 'assistant', content: START_MESSAGE, at: Date.now() }]
-      };
-    }
-
-    function loadChats() {
-      const raw = safeJSONParse(localStorage.getItem(STORAGE.chats), []);
-      if (!Array.isArray(raw) || !raw.length) return [makeNewChat('المحادثة الأولى')];
-      return raw.map(c => ({
-        id: c.id || uid(),
-        title: c.title || 'محادثة محفوظة',
-        createdAt: c.createdAt || Date.now(),
-        updatedAt: c.updatedAt || Date.now(),
-        model: c.model || DEFAULT_MODEL,
-        provider: c.provider || DEFAULT_PROVIDER,
-        messages: Array.isArray(c.messages) && c.messages.length ? c.messages.map(m => ({
-          role: m.role === 'assistant' ? 'assistant' : 'user',
-          content: String(m.content || ''),
-          at: m.at || Date.now(),
-          imageDataUrl: m.imageDataUrl || '',
-          imageName: m.imageName || ''
-        })) : [{ role: 'assistant', content: START_MESSAGE, at: Date.now() }]
-      }));
-    }
-
-    const state = {
-      groqKey: localStorage.getItem(STORAGE.groqKey) || '',
-      openaiKey: localStorage.getItem(STORAGE.openaiKey) || '',
-      deepseekKey: localStorage.getItem(STORAGE.deepseekKey) || '',
-      cohereKey: localStorage.getItem(STORAGE.cohereKey) || '',
-      provider: localStorage.getItem(STORAGE.provider) || DEFAULT_PROVIDER,
-      currentModel: localStorage.getItem(STORAGE.model) || DEFAULT_MODEL,
-      customModels: normalizeList(safeJSONParse(localStorage.getItem(STORAGE.customModels), [])),
-      routingMode: localStorage.getItem(STORAGE.routingMode) || 'auto',
-      chats: loadChats(),
-      activeChatId: localStorage.getItem(STORAGE.activeChat) || '',
-      isSending: false,
-      activeTab: 'chat',
-      attachedImage: null,
-      bgIndex: Number(localStorage.getItem(STORAGE.backgroundIndex) || 0),
-      autoBg: localStorage.getItem(STORAGE.autoBg) !== '0',
-      autoBgTimer: null,
-      musicEnabled: localStorage.getItem(STORAGE.musicEnabled) !== '0',
-      isRecording: false
-    };
-
-    // ====== DOM ELEMENTS ======
-    const els = {
-      wallpaper: document.querySelector('.wallpaper'),
-      tabBtns: [...document.querySelectorAll('.tab-btn')],
-      panels: [...document.querySelectorAll('.panel')],
-      panelTitle: document.getElementById('panelTitle'),
-      panelHint: document.getElementById('panelHint'),
-      chatMessages: document.getElementById('chatMessages'),
-      chatInput: document.getElementById('chatInput'),
-      sendBtn: document.getElementById('sendBtn'),
-      textToSpeechBtn: document.getElementById('textToSpeechBtn'),
-      providerSelect: document.getElementById('providerSelect'),
-      routingModeSelect: document.getElementById('routingModeSelect'),
-      modelSelect: document.getElementById('modelSelect'),
-      modelState: document.getElementById('modelState'),
-      keyState: document.getElementById('keyState'),
-      apiState: document.getElementById('apiState'),
-      chatState: document.getElementById('chatState'),
-      groqKeyInput: document.getElementById('groqKeyInput'),
-      openaiKeyInput: document.getElementById('openaiKeyInput'),
-      deepseekKeyInput: document.getElementById('deepseekKeyInput'),
-      cohereKeyInput: document.getElementById('cohereKeyInput'),
-      saveKeysBtn: document.getElementById('saveKeysBtn'),
-      toggleKeysBtn: document.getElementById('toggleKeysBtn'),
-      keyStatus: document.getElementById('keyStatus'),
-      searchInput: document.getElementById('searchInput'),
-      searchBtn: document.getElementById('searchBtn'),
-      googleSearchBtn: document.getElementById('googleSearchBtn'),
-      searchClearBtn: document.getElementById('searchClearBtn'),
-      searchResults: document.getElementById('searchResults'),
-      imagePrompt: document.getElementById('imagePrompt'),
-      genBtn: document.getElementById('genBtn'),
-      webImageBtn: document.getElementById('webImageBtn'),
-      samplePromptBtn: document.getElementById('samplePromptBtn'),
-      imageResult: document.getElementById('imageResult'),
-      clearChatBtn: document.getElementById('clearChatBtn'),
-      testKeyBtn: document.getElementById('testKeyBtn'),
-      newChatBtn: document.getElementById('newChatBtn'),
-      newChatTopBtn: document.getElementById('newChatTopBtn'),
-      clearAllChatsBtn: document.getElementById('clearAllChatsBtn'),
-      exportChatsBtn: document.getElementById('exportChatsBtn'),
-      importChatsBtn: document.getElementById('importChatsBtn'),
-      importFileInput: document.getElementById('importFileInput'),
-      imageFileInput: document.getElementById('imageFileInput'),
-      conversationList: document.getElementById('conversationList'),
-      chatTitleInput: document.getElementById('chatTitleInput'),
-      saveTitleBtn: document.getElementById('saveTitleBtn'),
-      exportOneBtn: document.getElementById('exportOneBtn'),
-      modelNotes: document.getElementById('modelNotes'),
-      attachmentBox: document.getElementById('attachmentBox'),
-      attachmentPreview: document.getElementById('attachmentPreview'),
-      attachmentTitle: document.getElementById('attachmentTitle'),
-      attachImageBtn: document.getElementById('attachImageBtn'),
-      clearAttachmentBtn: document.getElementById('clearAttachmentBtn'),
-      bgPrevBtn: document.getElementById('bgPrevBtn'),
-      bgNextBtn: document.getElementById('bgNextBtn'),
-      bgAutoBtn: document.getElementById('bgAutoBtn'),
-      customModelInput: document.getElementById('customModelInput'),
-      musicToggle: document.getElementById('musicToggle'),
-      musicPlayer: document.getElementById('musicPlayer')
-    };
-
-    // ====== PERSISTENCE ======
-    function persist() {
-      localStorage.setItem(STORAGE.groqKey, state.groqKey);
-      localStorage.setItem(STORAGE.openaiKey, state.openaiKey);
-      localStorage.setItem(STORAGE.deepseekKey, state.deepseekKey);
-      localStorage.setItem(STORAGE.cohereKey, state.cohereKey);
-      localStorage.setItem(STORAGE.provider, state.provider);
-      localStorage.setItem(STORAGE.model, state.currentModel);
-      localStorage.setItem(STORAGE.customModels, JSON.stringify(state.customModels));
-      localStorage.setItem(STORAGE.routingMode, state.routingMode);
-      localStorage.setItem(STORAGE.chats, JSON.stringify(state.chats));
-      localStorage.setItem(STORAGE.activeChat, state.activeChatId);
-      localStorage.setItem(STORAGE.backgroundIndex, String(state.bgIndex));
-      localStorage.setItem(STORAGE.autoBg, state.autoBg ? '1' : '0');
-      localStorage.setItem(STORAGE.musicEnabled, state.musicEnabled ? '1' : '0');
-    }
-
-    // ====== UI HELPERS ======
-    function providerInfo() { return PROVIDERS[state.provider] || PROVIDERS.groq; }
-    function currentKey() {
-      if (state.provider === 'openai') return state.openaiKey;
-      if (state.provider === 'deepseek') return state.deepseekKey;
-      if (state.provider === 'cohere') return state.cohereKey;
-      return state.groqKey;
-    }
-    function getActiveChat() { let c = state.chats.find(x => x.id === state.activeChatId); if (!c) { c = state.chats[0]; state.activeChatId = c.id; } return c; }
-    function setStatus(el, type, html) { el.className = `status ${type || ''}`.trim(); el.innerHTML = html; }
-
-    function updateHeader(tab) {
-      const map = {
-        chat: ['🦅 دردشة ذكية', 'موديلات + صوت + موسيقى + أمان'],
-        search: ['🔎 بحث عميق', 'ويكيبيديا + صور + بحث جوجل'],
-        image: ['🎨 الصور الذكية', 'رسم صور + بحث صور + فحص صور'],
-        settings: ['⚙️ الإعدادات', 'المفاتيح + الموديلات + المحادثات']
-      };
-      els.panelTitle.textContent = map[tab][0];
-      els.panelHint.textContent = map[tab][1];
-    }
-
-    function activateTab(tab) {
-      state.activeTab = tab;
-      els.tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-      els.panels.forEach(p => p.classList.toggle('active', p.id === tab));
-      updateHeader(tab);
-    }
-
-    // ====== PROVIDER & MODEL OPTIONS ======
-    function buildProviderOptions() {
-      els.providerSelect.innerHTML = Object.entries(PROVIDERS)
-        .map(([key, prov]) => `<option value="${key}">${prov.label}</option>`)
-        .join('');
-    }
-
-    function buildModelOptions() {
-      const base = providerInfo().models.map(m => ({ id: m, label: m }));
-      const custom = state.customModels.map(m => ({ id: m, label: `${m} (مخصص)` }));
-      const seen = new Set();
-      const deduped = [...base, ...custom].filter(x => !seen.has(x.id) && seen.add(x.id));
-      els.modelSelect.innerHTML = deduped.map(m => `<option value="${escapeHTML(m.id)}">${escapeHTML(m.label)}</option>`).join('');
-    }
-
-    function renderModelNotes() {
-      els.modelNotes.value = [
-        `المزود الحالي: ${PROVIDERS[state.provider].label}`,
-        `النمط: ${state.routingMode === 'auto' ? 'تلقائي ذكي مع Fallback' : 'موديل محدد'}`,
-        '',
-        'موديلات Groq:',
-        ...PROVIDERS.groq.models.map(m => `• ${m}`),
-        '',
-        'موديلات OpenAI:',
-        ...PROVIDERS.openai.models.map(m => `• ${m}`),
-        '',
-        'موديلات DeepSeek:',
-        ...PROVIDERS.deepseek.models.map(m => `• ${m}`),
-        '',
-        'موديلات Cohere:',
-        ...PROVIDERS.cohere.models.map(m => `• ${m}`),
-        '',
-        `الموديلات المخصصة: ${state.customModels.length ? state.customModels.join(', ') : 'لا توجد'}`,
-        '',
-        '✅ المزايا:',
-        '• Fallback ذكي (لو موديل وقع يتحول للتالي)',
-        '• صوت (Text-to-Speech) واختياري',
-        '• موسيقى رومانسية خفيفة',
-        '• قيود أخلاقية وأمان',
-        '• كل النمازج المشهورة'
-      ].join('\n');
-    }
-
-    function renderConversationList() {
-      state.chats.sort((a, b) => (b.updatedAt || b.createdAt) - (a.updatedAt || a.createdAt));
-      if (!state.chats.length) state.chats = [makeNewChat('المحادثة الأولى')];
-      els.conversationList.innerHTML = '';
-      state.chats.forEach(chat => {
-        const btn = document.createElement('button');
-        btn.className = `conversation-item ${chat.id === state.activeChatId ? 'active' : ''}`;
-        btn.innerHTML = `<div class="title">${escapeHTML(chat.title || 'بدون عنوان')}</div><div class="meta">${chat.messages?.length || 0} • ${timeLabel(chat.updatedAt || chat.createdAt)}</div>`;
-        btn.addEventListener('click', () => switchChat(chat.id));
-        els.conversationList.appendChild(btn);
-      });
-    }
-
-    function renderChat() {
-      const chat = getActiveChat();
-      els.chatMessages.innerHTML = '';
-      chat.messages.forEach(m => addMessageToUI(m.role, m.content, { imageDataUrl: m.imageDataUrl, imageName: m.imageName }));
-      els.chatTitleInput.value = chat.title;
-      els.modelState.textContent = `${PROVIDERS[state.provider]?.label || 'غير معروف'}: ${state.currentModel}`;
-      els.chatState.textContent = `${chat.messages.length} رسالة`;
-      renderConversationList();
-      scrollChatToBottom();
-    }
-
-    function refreshKeyUI() {
-      const hasKey = !!currentKey();
-      els.keyState.textContent = hasKey ? '✅ محفوظ' : '❌ غير محفوظ';
-      els.apiState.textContent = hasKey ? '🟢 جاهز' : '⚠️ بحاجة مفتاح';
-      setStatus(els.keyStatus, hasKey ? 'good' : 'warn', hasKey ? '✅ المفتاح آمن محليًا في المتصفح.' : 'لم تضف المفتاح بعد. أضفه في الإعدادات.');
-      els.groqKeyInput.value = state.groqKey;
-      els.openaiKeyInput.value = state.openaiKey;
-      els.deepseekKeyInput.value = state.deepseekKey;
-      els.cohereKeyInput.value = state.cohereKey;
-      els.groqKeyInput.type = 'password';
-      els.openaiKeyInput.type = 'password';
-      els.deepseekKeyInput.type = 'password';
-      els.cohereKeyInput.type = 'password';
-    }
-
-    function updateAttachmentBox() {
-      if (state.attachedImage?.dataUrl) {
-        els.attachmentBox.classList.add('active');
-        els.attachmentPreview.src = state.attachedImage.dataUrl;
-        els.attachmentTitle.textContent = state.attachedImage.name || 'صورة مرفقة';
-      } else {
-        els.attachmentBox.classList.remove('active');
-      }
-    }
-
-    function scrollChatToBottom() { els.chatMessages.scrollTop = els.chatMessages.scrollHeight; }
-
-    function addMessageToUI(role, content, meta = {}) {
-      const msg = document.createElement('div');
-      msg.className = `message ${role}`;
-      const avatar = document.createElement('div');
-      avatar.className = 'message-avatar';
-      avatar.textContent = role === 'user' ? '👤' : '🦅';
-      const bubble = document.createElement('div');
-      bubble.className = 'message-content';
-      bubble.innerHTML = formatText(content);
-      if (meta.imageDataUrl) {
-        const img = document.createElement('img');
-        img.className = 'img-preview';
-        img.src = meta.imageDataUrl;
-        img.alt = meta.imageName || 'attachment';
-        bubble.appendChild(img);
-      }
-      msg.appendChild(avatar);
-      msg.appendChild(bubble);
-      els.chatMessages.appendChild(msg);
-      scrollChatToBottom();
-    }
-
-    function addThinking() {
-      const msg = document.createElement('div');
-      msg.className = 'message user';
-      msg.dataset.thinking = '1';
-      msg.innerHTML = '<div class="message-avatar">🦅</div><div class="message-content"><span class="spinner"><span class="pulse"></span> جاري التفكير...</span></div>';
-      els.chatMessages.appendChild(msg);
-      scrollChatToBottom();
-    }
-
-    function removeThinking() {
-      const el = els.chatMessages.querySelector('[data-thinking="1"]');
-      if (el) el.remove();
-    }
-
-    function addToChat(role, content, meta = {}) {
-      const chat = getActiveChat();
-      chat.messages.push({
-        role,
-        content,
-        at: Date.now(),
-        imageDataUrl: meta.imageDataUrl || '',
-        imageName: meta.imageName || ''
-      });
-      chat.updatedAt = Date.now();
-      if (role === 'user' && (!chat.title || chat.title === 'محادثة جديدة' || chat.title === 'المحادثة الأولى')) {
-        const s = content.trim().slice(0, 28);
-        chat.title = s ? (s.length > 28 ? `${s}...` : s) : chat.title;
-      }
-      chat.model = state.currentModel;
-      chat.provider = state.provider;
-      persist();
-      els.chatState.textContent = `${chat.messages.length} رسالة`;
-      renderConversationList();
-    }
-
-    // ====== DEVELOPER REPLY ======
-    function specialReplyCheck(text) {
-      return /(مين اللي طورك|من طورك|who developed you|who made you|who created you|مين صنعك|مين اللي عملك)/i.test(text || '');
-    }
-
-    function specialReply() {
-      return `I was developed by Engineer Mohamed Ragab Abdelmonem 🚀
-
-محمد رجب عبد المنعم هو اللي طورني وبيساعد في تدريبي بذكاء عالي جدًا. 
-هو اللي حاطط القيود الأخلاقية والأمان عشان أكون آمن وحامي للناس. 
-شكراً يا محمد على كل الجهد والحب! 💚`;
-    }
-
-    // ====== BACKGROUND MANAGEMENT ======
-    function setWallpaper(index) {
-      state.bgIndex = (index + NATURE_BACKGROUNDS.length) % NATURE_BACKGROUNDS.length;
-      els.wallpaper.style.backgroundImage = `url('${NATURE_BACKGROUNDS[state.bgIndex]}')`;
-      persist();
-    }
-
-    function updateBgButton() { els.bgAutoBtn.innerHTML = `<i class="fas fa-rotate"></i> ${state.autoBg ? '✅' : '⏸️'}`; }
-
-    function startAutoBackground() {
-      if (state.autoBgTimer) clearInterval(state.autoBgTimer);
-      if (!state.autoBg) return;
-      state.autoBgTimer = setInterval(() => setWallpaper(state.bgIndex + 1), 45000);
-    }
-
-    function refreshBackgroundOnLoad() {
-      setWallpaper(state.bgIndex);
-      updateBgButton();
-      startAutoBackground();
-    }
-
-    // ====== MUSIC CONTROL ======
-    function toggleMusic() {
-      if (state.musicEnabled) {
-        els.musicPlayer.pause();
-        els.musicToggle.classList.remove('playing');
-        state.musicEnabled = false;
-      } else {
-        els.musicPlayer.src = ROMANTIC_MUSIC;
-        els.musicPlayer.play().catch(() => { /* مش كل المتصفحات تسمح */ });
-        els.musicToggle.classList.add('playing');
-        state.musicEnabled = true;
-      }
-      persist();
-    }
-
-    // ====== TEXT-TO-SPEECH ======
-    function speakText(text) {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'ar-SA';
-        utterance.rate = 0.9;
-        window.speechSynthesis.speak(utterance);
-      }
-    }
-
-    // ====== CHAT MANAGEMENT ======
-    function newChat() {
-      const chat = makeNewChat('محادثة جديدة', state.currentModel, state.provider);
-      state.chats.unshift(chat);
-      state.activeChatId = chat.id;
-      persist();
-      renderConversationList();
-      renderChat();
-      els.chatInput.focus();
-    }
-
-    function switchChat(id) {
-      state.activeChatId = id;
-      const chat = getActiveChat();
-      state.provider = chat.provider || state.provider;
-      state.currentModel = chat.model || state.currentModel;
-      persist();
-      buildModelOptions();
-      refreshUI();
-      renderChat();
-    }
-
-    function clearCurrentChat() {
-      const chat = getActiveChat();
-      if (!confirm('تمسح محتوى المحادثة؟')) return;
-      chat.messages = [{ role: 'assistant', content: START_MESSAGE, at: Date.now() }];
-      chat.updatedAt = Date.now();
-      persist();
-      renderChat();
-    }
-
-    function clearAllChats() {
-      if (!confirm('تمسح كل المحادثات؟')) return;
-      state.chats = [makeNewChat('المحادثة الأولى', state.currentModel, state.provider)];
-      state.activeChatId = state.chats[0].id;
-      persist();
-      renderConversationList();
-      renderChat();
-    }
-
-    function setChatTitle() {
-      const chat = getActiveChat();
-      const title = els.chatTitleInput.value.trim();
-      if (!title) return;
-      chat.title = title;
-      chat.updatedAt = Date.now();
-      persist();
-      renderConversationList();
-    }
-
-    // ====== EXPORT/IMPORT ======
-    function exportChatsFile(chats = state.chats, name = 'almasry-chats.json') {
-      const blob = new Blob([JSON.stringify({ exportedAt: new Date().toISOString(), chats }, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = name;
-      a.click();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
-    }
-
-    function importChatsFromObject(obj) {
-      const incoming = Array.isArray(obj?.chats) ? obj.chats : Array.isArray(obj) ? obj : null;
-      if (!incoming) throw new Error('ملف غير صالح');
-      const normalized = incoming.map(chat => ({
-        id: chat.id || uid(),
-        title: chat.title || 'محادثة مستوردة',
-        createdAt: chat.createdAt || Date.now(),
-        updatedAt: chat.updatedAt || Date.now(),
-        model: chat.model || DEFAULT_MODEL,
-        provider: chat.provider || DEFAULT_PROVIDER,
-        messages: Array.isArray(chat.messages) && chat.messages.length ? chat.messages.map(m => ({
-          role: m.role === 'assistant' ? 'assistant' : 'user',
-          content: String(m.content || ''),
-          at: m.at || Date.now(),
-          imageDataUrl: m.imageDataUrl || '',
-          imageName: m.imageName || ''
-        })) : [{ role: 'assistant', content: START_MESSAGE, at: Date.now() }]
-      }));
-      state.chats = [...normalized, ...state.chats].filter((c, i, arr) => i === arr.findIndex(x => x.id === c.id));
-      state.activeChatId = state.chats[0]?.id || '';
-      persist();
-      renderConversationList();
-      renderChat();
-    }
-
-    // ====== API CALLS ======
-    async function callGroq(model, messages) {
-      const res = await fetch(PROVIDERS.groq.endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${state.groqKey}`
-        },
-        body: JSON.stringify({
-          model,
-          messages,
-          temperature: 0.7,
-          max_tokens: 2000,
-          top_p: 0.95,
-          stream: false
-        })
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data?.error?.message || `HTTP ${res.status}`);
-      const reply = data?.choices?.[0]?.message?.content;
-      if (!reply) throw new Error('رد فاضي');
-      return reply;
-    }
-
-    async function callOpenAI(model, messages) {
-      const res = await fetch(PROVIDERS.openai.endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${state.openaiKey}`
-        },
-        body: JSON.stringify({
-          model,
-          messages,
-          temperature: 0.7,
-          max_tokens: 2000
-        })
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data?.error?.message || `HTTP ${res.status}`);
-      const reply = data?.choices?.[0]?.message?.content;
-      if (!reply) throw new Error('رد فاضي');
-      return reply;
-    }
-
-    async function callDeepSeek(model, messages) {
-      const res = await fetch(PROVIDERS.deepseek.endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${state.deepseekKey}`
-        },
-        body: JSON.stringify({
-          model,
-          messages,
-          temperature: 0.7,
-          max_tokens: 2000
-        })
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data?.error?.message || `HTTP ${res.status}`);
-      const reply = data?.choices?.[0]?.message?.content;
-      if (!reply) throw new Error('رد فاضي');
-      return reply;
-    }
-
-    function buildMessages(chat, userText, userImage) {
-      const history = chat.messages.filter(m => m.role === 'user' || m.role === 'assistant').slice(-14);
-      const messages = [{ role: 'system', content: SYSTEM_PROMPT }, ...history.map(m => ({ role: m.role, content: m.content }))];
-      messages.push({ role: 'user', content: userText });
-      return messages;
-    }
-
-    // ====== SEARCH ======
-    async function deepSearch() {
-      const q = els.searchInput.value.trim();
-      if (!q) { els.searchResults.innerHTML = 'ابحث أولًا...'; return; }
-      els.searchResults.innerHTML = '<div class="loader"><span class="pulse"></span> جاري البحث...</div>';
-      try {
-        const url = `https://ar.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(q)}&format=json&origin=*`;
-        const res = await fetch(url);
-        const data = await res.json();
-        const results = (data?.query?.search || []).slice(0, 5);
-        if (!results.length) { els.searchResults.innerHTML = 'لا توجد نتائج.'; return; }
-        let html = results.map(r => `<div class="result-item"><strong>${escapeHTML(r.title)}</strong><small>${escapeHTML(r.snippet || '')}</small></div>`).join('');
-        html += `<div class="result-item"><button class="chip" onclick="window.open('https://www.google.com/search?q=${encodeURIComponent(q)}','_blank')"><i class="fab fa-google"></i> جوجل</button></div>`;
-        els.searchResults.innerHTML = html;
-      } catch (err) {
-        els.searchResults.innerHTML = `<div class="status bad">خطأ: ${escapeHTML(err.message)}</div>`;
-      }
-    }
-
-    // ====== IMAGE ======
-    function generateImage() {
-      const prompt = els.imagePrompt.value.trim();
-      if (!prompt) { els.imageResult.innerHTML = '<div class="status warn">اكتب وصف الصورة</div>'; return; }
-      const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1024&height=1024`;
-      els.imageResult.innerHTML = `<img class="img-preview" src="${escapeHTML(url)}" alt="generated" onclick="window.open('${url}','_blank')" />`;
-    }
-
-    function generateSamplePrompt() {
-      els.imagePrompt.value = 'مدينة مصرية مستقبلية ليلًا، نيون، ماء، سينمائي';
-      generateImage();
-    }
-
-    // ====== KEYS ======
-    function saveKeys() {
-      state.groqKey = els.groqKeyInput.value.trim();
-      state.openaiKey = els.openaiKeyInput.value.trim();
-      state.deepseekKey = els.deepseekKeyInput.value.trim();
-      state.cohereKey = els.cohereKeyInput.value.trim();
-      persist();
-      refreshKeyUI();
-      setStatus(els.keyStatus, 'good', '✅ تم الحفظ');
-    }
-
-    async function testKey() {
-      if (!currentKey()) { setStatus(els.keyStatus, 'warn', 'لا يوجد مفتاح'); return; }
-      els.testKeyBtn.disabled = true;
-      try {
-        const msgs = [{ role: 'system', content: 'رد بكلمة واحدة فقط' }, { role: 'user', content: 'تحيتك؟' }];
-        let reply = '';
-        if (state.provider === 'openai') {
-          reply = await callOpenAI('gpt-4o-mini', msgs);
-        } else if (state.provider === 'deepseek') {
-          reply = await callDeepSeek('deepseek-chat', msgs);
-        } else {
-          reply = await callGroq('llama-3.1-8b-instant', msgs);
-        }
-        setStatus(els.keyStatus, 'good', `✅ يعمل: ${escapeHTML(reply.slice(0, 30))}`);
-      } catch (err) {
-        setStatus(els.keyStatus, 'bad', `❌ ${escapeHTML(err.message || 'فشل')}`);
-      } finally {
-        els.testKeyBtn.disabled = false;
-      }
-    }
-
-    // ====== CHAT SEND ======
-    async function sendChat(text) {
-      // Check for unsafe content
-      const blocked = blockMessage(text);
-      if (blocked) {
-        addMessageToUI('user', text);
-        addToChat('user', text);
-        addMessageToUI('user', blocked);
-        addToChat('assistant', blocked);
-        return;
-      }
-
-      if (!currentKey()) { addMessageToUI('user', text); addToChat('user', text); addMessageToUI('user', '⚠️ أضف المفتاح'); addToChat('assistant', '⚠️ أضف المفتاح'); return; }
-      if (state.isSending || !text.trim()) return;
-      state.isSending = true;
-      els.sendBtn.disabled = true;
-      els.sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-      els.apiState.textContent = '⏳ يرسل...';
-
-      try {
-        if (specialReplyCheck(text)) {
-          addMessageToUI('user', text);
-          addToChat('user', text);
-          const reply = specialReply();
-          addMessageToUI('user', reply);
-          addToChat('assistant', reply);
-          speakText(reply);
-          return;
-        }
-
-        addMessageToUI('user', text);
-        addToChat('user', text);
-        addThinking();
-
-        const chat = getActiveChat();
-        const messages = buildMessages(chat, text);
-        let reply = '';
-
-        try {
-          if (state.provider === 'openai') {
-            reply = await callOpenAI(state.currentModel, messages);
-          } else if (state.provider === 'deepseek') {
-            reply = await callDeepSeek(state.currentModel, messages);
-          } else {
-            reply = await callGroq(state.currentModel, messages);
-          }
-        } catch (err) {
-          // Try fallback
-          for (const model of [...PROVIDERS[state.provider].models]) {
-            try {
-              if (state.provider === 'openai') {
-                reply = await callOpenAI(model, messages);
-              } else if (state.provider === 'deepseek') {
-                reply = await callDeepSeek(model, messages);
-              } else {
-                reply = await callGroq(model, messages);
-              }
-              state.currentModel = model;
-              break;
-            } catch {}
-          }
-          if (!reply) throw err;
-        }
-
-        removeThinking();
-        addMessageToUI('user', reply);
-        addToChat('assistant', reply);
-        speakText(reply);
-        els.modelState.textContent = `${PROVIDERS[state.provider]?.label}: ${state.currentModel}`;
-        els.apiState.textContent = `✅ ${state.currentModel}`;
-      } catch (err) {
-        removeThinking();
-        const msg = `❌ خطأ: ${err.message || 'فشل الرد'}`;
-        addMessageToUI('user', msg);
-        addToChat('assistant', msg);
-        els.apiState.textContent = '❌ خطأ';
-      } finally {
-        state.isSending = false;
-        els.sendBtn.disabled = false;
-        els.sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال';
-        persist();
-        renderConversationList();
-      }
-    }
-
-    // ====== ATTACHMENTS ======
-    async function attachImageFile(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          const img = new Image();
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            let w = img.width, h = img.height;
-            const max = 1024;
-            if (w > h && w > max) { h = Math.round(h * max / w); w = max; }
-            else if (h > max) { w = Math.round(w * max / h); h = max; }
-            canvas.width = w;
-            canvas.height = h;
-            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-            state.attachedImage = { name: file.name, dataUrl: canvas.toDataURL('image/jpeg', 0.8) };
-            updateAttachmentBox();
-            resolve();
-          };
-          img.onerror = () => reject(new Error('تحميل الصورة فشل'));
-          img.src = reader.result;
-        };
-        reader.onerror = () => reject(new Error('قراءة الملف فشلت'));
-        reader.readAsDataURL(file);
-      });
-    }
-
-    function clearAttachment() { state.attachedImage = null; updateAttachmentBox(); }
-
-    // ====== REFRESH UI ======
-    function refreshUI() {
-      buildProviderOptions();
-      buildModelOptions();
-      renderModelNotes();
-      refreshKeyUI();
-      updateAttachmentBox();
-      els.providerSelect.value = state.provider;
-      els.routingModeSelect.value = state.routingMode;
-      els.modelSelect.value = state.currentModel;
-      els.customModelInput.value = state.customModels.join(', ');
-      els.modelState.textContent = `${PROVIDERS[state.provider]?.label}: ${state.currentModel}`;
-    }
-
-    // ====== EVENTS ======
-    els.tabBtns.forEach(b => b.addEventListener('click', () => activateTab(b.dataset.tab)));
-    els.providerSelect.addEventListener('change', () => {
-      state.provider = els.providerSelect.value;
-      state.currentModel = PROVIDERS[state.provider]?.models[0] || DEFAULT_MODEL;
-      persist();
-      buildModelOptions();
-      refreshUI();
-    });
-    els.routingModeSelect.addEventListener('change', () => {
-      state.routingMode = els.routingModeSelect.value;
-      persist();
-      renderModelNotes();
-    });
-    els.modelSelect.addEventListener('change', () => {
-      state.currentModel = els.modelSelect.value;
-      persist();
-      els.modelState.textContent = `${PROVIDERS[state.provider]?.label}: ${state.currentModel}`;
-    });
-    els.customModelInput.addEventListener('change', () => {
-      state.customModels = normalizeList((els.customModelInput.value || '').split(','));
-      persist();
-      buildModelOptions();
-    });
-
-    els.sendBtn.addEventListener('click', () => { const text = els.chatInput.value.trim(); if (text) { els.chatInput.value = ''; sendChat(text); } });
-    els.chatInput.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); els.sendBtn.click(); } });
-    els.textToSpeechBtn.addEventListener('click', () => { const text = els.chatInput.value.trim(); if (text) speakText(text); });
-
-    document.querySelectorAll('[data-fill]').forEach(btn => btn.addEventListener('click', () => { els.chatInput.value = btn.dataset.fill; els.chatInput.focus(); }));
-
-    els.saveKeysBtn.addEventListener('click', saveKeys);
-    els.toggleKeysBtn.addEventListener('click', () => {
-      els.groqKeyInput.type = els.groqKeyInput.type === 'password' ? 'text' : 'password';
-      els.openaiKeyInput.type = els.openaiKeyInput.type === 'password' ? 'text' : 'password';
-      els.deepseekKeyInput.type = els.deepseekKeyInput.type === 'password' ? 'text' : 'password';
-      els.cohereKeyInput.type = els.cohereKeyInput.type === 'password' ? 'text' : 'password';
-    });
-    els.testKeyBtn.addEventListener('click', testKey);
-
-    els.searchBtn.addEventListener('click', deepSearch);
-    els.searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') deepSearch(); });
-    els.searchClearBtn.addEventListener('click', () => { els.searchInput.value = ''; els.searchResults.innerHTML = ''; });
-    els.googleSearchBtn.addEventListener('click', () => { const q = els.searchInput.value.trim(); if (q) window.open(`https://www.google.com/search?q=${encodeURIComponent(q)}`, '_blank'); });
-
-    els.genBtn.addEventListener('click', generateImage);
-    els.webImageBtn.addEventListener('click', () => { const q = els.imagePrompt.value.trim(); if (q) window.open(`https://www.google.com/search?q=${encodeURIComponent(q)}&tbm=isch`, '_blank'); });
-    els.samplePromptBtn.addEventListener('click', generateSamplePrompt);
-
-    els.clearChatBtn.addEventListener('click', clearCurrentChat);
-    els.newChatBtn.addEventListener('click', newChat);
-    els.newChatTopBtn.addEventListener('click', newChat);
-    els.clearAllChatsBtn.addEventListener('click', clearAllChats);
-    els.exportChatsBtn.addEventListener('click', () => exportChatsFile());
-    els.importChatsBtn.addEventListener('click', () => els.importFileInput.click());
-    els.importFileInput.addEventListener('change', async () => {
-      const f = els.importFileInput.files?.[0];
-      if (f) try { await importChatsFromObject(JSON.parse(await f.text())); } catch (err) { alert(`فشل: ${err.message}`); } finally { els.importFileInput.value = ''; }
-    });
-
-    els.saveTitleBtn.addEventListener('click', setChatTitle);
-    els.exportOneBtn.addEventListener('click', () => { const c = getActiveChat(); exportChatsFile([c], `${c.title.replace(/[^a-zA-Z0-9]/g, '_')}.json`); });
-
-    els.attachImageBtn.addEventListener('click', () => els.imageFileInput.click());
-    els.clearAttachmentBtn.addEventListener('click', clearAttachment);
-    els.imageFileInput.addEventListener('change', async () => { const f = els.imageFileInput.files?.[0]; if (f) await attachImageFile(f); els.imageFileInput.value = ''; });
-
-    els.bgPrevBtn.addEventListener('click', () => setWallpaper(state.bgIndex - 1));
-    els.bgNextBtn.addEventListener('click', () => setWallpaper(state.bgIndex + 1));
-    els.bgAutoBtn.addEventListener('click', () => { state.autoBg = !state.autoBg; persist(); updateBgButton(); startAutoBackground(); });
-
-    els.musicToggle.addEventListener('click', toggleMusic);
-
-    // ====== INIT ======
-    (function init() {
-      if (!state.chats.length) state.chats = [makeNewChat()];
-      if (!state.activeChatId) state.activeChatId = state.chats[0].id;
-      refreshUI();
-      renderChat();
-      refreshBackgroundOnLoad();
-      if (state.musicEnabled) {
-        els.musicPlayer.src = ROMANTIC_MUSIC;
-        els.musicToggle.classList.add('playing');
-      }
-      els.chatInput.focus();
-    })();
-  </script>
+  <!-- Main Application -->
+  <script src="app.js"></script>
 </body>
 </html>

@@ -1,11 +1,11 @@
 // ============================================================
-//  المصري الذكي – النسخة الأسطورية v9.0
-//  أمان كامل، تحليل صور (OCR + Vision API)، Markdown متقدم، نطق
+//  المصري الذكي – النسخة الأسطورية v9.2
+//  دعم لصق الصور (Ctrl+V), صوت ثابت, ذكاء فائق, سرعة عالية
 // ============================================================
 
 'use strict';
 
-// ========== 1. STORAGE KEYS (نفس قبل) ==========
+// ========== 1. STORAGE KEYS ==========
 const STORAGE = {
   groqKey: 'groq_key_v3',
   openaiKey: 'openai_key_v3',
@@ -19,7 +19,7 @@ const STORAGE = {
   autoBg: 'auto_bg_v3'
 };
 
-// ========== 2. BACKGROUNDS (نفس السابق، اختصارًا) ==========
+// ========== 2. BACKGROUNDS (نفس السابق، اختصار) ==========
 const BACKGROUNDS = [
   { url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=85', name: '🌊 البحر الهادئ' },
   { url: 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&w=1920&q=85', name: '🌅 شروق الشمس' },
@@ -76,18 +76,13 @@ const PROVIDERS = {
 const DEFAULT_PROVIDER = 'groq';
 const DEFAULT_MODEL = 'llama-3.3-70b-versatile';
 
-const SYSTEM_PROMPT = `أنت مساعد ذكي اسمك "المصري الذكي". أسلوبك دافئ وواضح. ردودك مفصلة ومفيدة. خبير في البرمجة، الأمن السيبراني، التصميم، والعلوم. عند سؤالك عن المطور: مطور هذا البرنامج هو المهندس محمد رجب عبد المنعم من الفيوم – مركز طامية، خبير في برمجة التطبيقات والأمن السيبراني، طالب نظم ومعلومات، من مواليد 25 أكتوبر 2006.`;
+// نظام تعليمي فائق الذكاء
+const SYSTEM_PROMPT = `أنت مساعد خارق الذكاء اسمك "المصري الذكي". أسلوبك دافئ، حكيم، ومليء بالتفاصيل العميقة. ردودك طويلة وشاملة، تقدم أمثلة واقعية وتحليلاً دقيقاً. أنت خبير في كل المجالات: البرمجة، الأمن السيبراني، الفيزياء، الفلسفة، الأدب، التاريخ، وحل المشكلات المعقدة. إذا سُئلت عن المطور، قل: المهندس محمد رجب عبد المنعم – من الفيوم، طالب نظم ومعلومات، خبير في الأمن السيبراني وتطوير التطبيقات، من مواليد 25 أكتوبر 2006. لا تختصر أبداً، وكن كريماً في المعلومات.`;
 
-const START_MESSAGE = `✨ أهلاً! أنا **المصري الذكي** v9.0 – أمان كامل، تحليل صور، ونطق. اسأل أي شيء! 🚀🦅`;
+const START_MESSAGE = `✨ أهلاً! أنا **المصري الذكي** v9.2 – بث فائق السرعة، تحليل صور باللصق، صوت، وذكاء لا نهائي. اسأل أي شيء! 🚀🦅`;
 
-// ========== 4. UTILITIES (Markdown-it, DOMPurify, OCR, Cache) ==========
-const md = window.markdownit({
-  html: false,
-  linkify: true,
-  typographer: true,
-  breaks: true
-});
-// تخصيص الروابط لإضافة rel="noopener noreferrer"
+// ========== 4. UTILITIES ==========
+const md = window.markdownit({ html: false, linkify: true, typographer: true, breaks: true });
 md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
   const token = tokens[idx];
   const aIndex = token.attrIndex('target');
@@ -101,17 +96,14 @@ md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
 
 const safeJSON = (v, fb) => { try { return JSON.parse(v); } catch { return fb; } };
 const uid = () => crypto?.randomUUID ? crypto.randomUUID() : `c_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
-const escHTML = s => String(s).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-// OCR باستخدام Tesseract.js
+// OCR
 async function extractTextFromImage(dataUrl) {
   const statusEl = document.getElementById('imageOcrStatus');
   if (statusEl) statusEl.textContent = '⏳ جاري تحليل الصورة...';
   try {
-    const { data: { text } } = await Tesseract.recognize(dataUrl, 'ara+eng', {
-      logger: m => console.log(m)
-    });
+    const { data: { text } } = await Tesseract.recognize(dataUrl, 'ara+eng', { logger: m => console.log(m) });
     if (statusEl) statusEl.textContent = '✅ تم التحليل';
     return text.trim();
   } catch (err) {
@@ -121,7 +113,7 @@ async function extractTextFromImage(dataUrl) {
   }
 }
 
-// كاش مع expiry (ساعة)
+// كاش مع expiry
 const responseCache = new Map();
 function getCacheKey(provider, model, messages) {
   const str = provider + '|' + model + '|' + JSON.stringify(messages);
@@ -132,32 +124,16 @@ function getCacheKey(provider, model, messages) {
   }
   return hash.toString(36);
 }
-function setCached(key, reply) {
-  responseCache.set(key, { reply, expiry: Date.now() + 3600000 });
-}
-function getCached(key) {
-  const entry = responseCache.get(key);
-  if (!entry) return null;
-  if (Date.now() > entry.expiry) {
-    responseCache.delete(key);
-    return null;
-  }
-  return entry.reply;
-}
-// تنظيف الكاش كل ساعة
-setInterval(() => {
-  const now = Date.now();
-  for (let [k, v] of responseCache.entries()) {
-    if (now > v.expiry) responseCache.delete(k);
-  }
-}, 3600000);
+function setCached(key, reply) { responseCache.set(key, { reply, expiry: Date.now() + 3600000 }); }
+function getCached(key) { const entry = responseCache.get(key); if (!entry) return null; if (Date.now() > entry.expiry) { responseCache.delete(key); return null; } return entry.reply; }
+setInterval(() => { const now = Date.now(); for (let [k, v] of responseCache.entries()) if (now > v.expiry) responseCache.delete(k); }, 3600000);
 
-// Sanitize مع DOMPurify
+// Sanitize
 function sanitizeHTML(html) {
   return window.DOMPurify ? window.DOMPurify.sanitize(html, { ALLOWED_TAGS: ['strong', 'em', 'code', 'pre', 'h1', 'h2', 'h3', 'ul', 'li', 'a', 'p', 'br', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'img'], ALLOWED_ATTR: ['href', 'target', 'rel', 'src', 'alt', 'class'] }) : html;
 }
 
-// ========== 5. STATE (نفس السابق) ==========
+// ========== 5. STATE ==========
 function makeChat(title = 'محادثة جديدة', model = DEFAULT_MODEL, provider = DEFAULT_PROVIDER) {
   return { id: uid(), title, createdAt: Date.now(), updatedAt: Date.now(), model, provider, messages: [{ role: 'assistant', content: START_MESSAGE, at: Date.now() }] };
 }
@@ -184,7 +160,8 @@ const state = {
   autoBgTimer: null,
   bgTransitioning: false,
   abortController: null,
-  lastSendTime: 0
+  lastSendTime: 0,
+  speechEnabled: false
 };
 
 // ========== 6. DOM REFS ==========
@@ -211,7 +188,7 @@ const el = {
 
 // ========== 7. BACKGROUND SYSTEM (كل 15 ثانية) – مختصر ==========
 let _activeLayer = 1;
-function buildBgDots() { /* كما كان */ el.bgDots.innerHTML = ''; BACKGROUNDS.forEach((bg, i) => { let d = document.createElement('div'); d.className = `bg-dot ${i === state.bgIndex ? 'active' : ''}`; d.title = bg.name; d.addEventListener('click', () => setBackground(i)); el.bgDots.appendChild(d); }); }
+function buildBgDots() { el.bgDots.innerHTML = ''; BACKGROUNDS.forEach((bg, i) => { let d = document.createElement('div'); d.className = `bg-dot ${i === state.bgIndex ? 'active' : ''}`; d.title = bg.name; d.addEventListener('click', () => setBackground(i)); el.bgDots.appendChild(d); }); }
 function updateBgDots() { $$('.bg-dot').forEach((d, i) => d.classList.toggle('active', i === state.bgIndex)); }
 let _indicatorTimeout = null;
 function showBgIndicator() { el.bgIndicator.classList.add('visible'); clearTimeout(_indicatorTimeout); _indicatorTimeout = setTimeout(() => el.bgIndicator.classList.remove('visible'), 3500); }
@@ -221,7 +198,7 @@ function startAutoBg() { if (state.autoBgTimer) clearInterval(state.autoBgTimer)
 function initBackgrounds() { el.bgLayer1.style.backgroundImage = `url('${BACKGROUNDS[state.bgIndex].url}')`; el.bgLayer1.style.opacity = '0.72'; el.bgLayer2.style.opacity = '0'; el.bgName.textContent = BACKGROUNDS[state.bgIndex].name; buildBgDots(); updateBgAutoBtn(); startAutoBg(); }
 
 // ========== 8. TABS ==========
-const PANEL_META = { chat: ['🦅 دردشة ذكية', 'تحليل صور + نطق'], search: ['🔎 بحث عميق', 'ويكيبيديا + جوجل'], image: ['🎨 الصور الذكية', 'رسم + بحث'], settings: ['⚙️ الإعدادات', 'مفاتيح + تحذيرات'] };
+const PANEL_META = { chat: ['🦅 دردشة ذكية', 'لصق صور + صوت + سرعة'], search: ['🔎 بحث عميق', 'ويكيبيديا + جوجل'], image: ['🎨 الصور الذكية', 'رسم + بحث'], settings: ['⚙️ الإعدادات', 'مفاتيح + تحذيرات'] };
 function activateTab(tab) { state.activeTab = tab; $$('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab)); $$('.panel').forEach(p => p.classList.toggle('active', p.id === tab)); const [title, hint] = PANEL_META[tab] || ['', '']; el.panelTitle.textContent = title; el.panelHint.textContent = hint; }
 
 // ========== 9. MODEL SELECTS ==========
@@ -229,16 +206,16 @@ function currentProvider() { return PROVIDERS[state.provider] || PROVIDERS.groq;
 function currentKey() { return state.provider === 'openai' ? state.openaiKey : state.groqKey; }
 function buildProviderOptions() { el.providerSelect.innerHTML = Object.entries(PROVIDERS).map(([k, p]) => `<option value="${k}" ${k === state.provider ? 'selected' : ''}>${p.label}</option>`).join(''); }
 function buildModelOptions() { const base = currentProvider().models.map(m => ({ id: m, label: m })); const custom = state.customModels.map(m => ({ id: m, label: `${m} (مخصص)` })); const seen = new Set(); const all = [...base, ...custom].filter(x => !seen.has(x.id) && seen.add(x.id)); el.modelSelect.innerHTML = all.map(m => `<option value="${escHTML(m.id)}" ${m.id === state.currentModel ? 'selected' : ''}>${escHTML(m.label)}</option>`).join(''); }
-function renderModelNotes() { el.modelNotes.value = [`المزود: ${currentProvider().label}`, '⚠️ تخزين المفاتيح غير آمن', `عدد الخلفيات: ${BACKGROUNDS.length}`, 'تم تفعيل OCR و Markdown الآمن'].join('\n'); }
+function renderModelNotes() { el.modelNotes.value = [`المزود: ${currentProvider().label}`, '⚠️ تخزين المفاتيح غير آمن', `عدد الخلفيات: ${BACKGROUNDS.length}`, 'تم تفعيل OCR و Markdown الآمن', 'دعم لصق الصور (Ctrl+V)'].join('\n'); }
 
 // ========== 10. CHAT HELPERS ==========
 function getActiveChat() { let c = state.chats.find(x => x.id === state.activeChatId); if (!c) { c = state.chats[0] || makeChat(); if (!state.chats.length) state.chats.push(c); state.activeChatId = c.id; } return c; }
 function setStatus(elRef, cls, html) { if (elRef) { elRef.className = `status-box ${cls}`; elRef.innerHTML = html; } }
-function refreshKeyUI() { const has = !!currentKey(); el.keyState.textContent = has ? '🔑 ✅' : '🔑 ❌'; el.apiState.textContent = has ? '⚡ جاهز' : '⚡ يحتاج مفتاح'; el.groqKeyInput.value = state.groqKey; el.openaiKeyInput.value = state.openaiKey; setStatus(el.keyStatus, has ? 'good' : 'warn', has ? '✅ مفتاح محفوظ (غير آمن)' : '⚠️ أدخل مفتاحك. يفضل استخدام backend.'); }
+function refreshKeyUI() { const has = !!currentKey(); el.keyState.textContent = has ? '🔑 ✅' : '🔑 ❌'; el.apiState.textContent = has ? '⚡ جاهز' : '⚡ يحتاج مفتاح'; el.groqKeyInput.value = state.groqKey; el.openaiKeyInput.value = state.openaiKey; setStatus(el.keyStatus, has ? 'good' : 'warn', has ? '✅ مفتاح محفوظ (غير آمن)' : '⚠️ أدخل مفتاحك.'); }
 function updateAttachmentBox() { if (state.attachedImage?.dataUrl) { el.attachmentBox.classList.add('active'); el.attachmentPreview.src = state.attachedImage.dataUrl; el.attachmentTitle.textContent = state.attachedImage.name || 'صورة'; if (el.imageOcrStatus) el.imageOcrStatus.textContent = ''; } else el.attachmentBox.classList.remove('active'); }
 function scrollBottom() { el.chatMessages.scrollTop = el.chatMessages.scrollHeight; }
 
-// ========== 11. RENDER MESSAGES مع Markdown الآمن ونطق ==========
+// ========== 11. RENDER MESSAGES مع صوت ==========
 function addMsgToUI(role, content, meta = {}) {
   const wrap = document.createElement('div'); wrap.className = `message ${role}`;
   const avatar = document.createElement('div'); avatar.className = 'msg-avatar'; avatar.textContent = role === 'user' ? '👤' : '🦅';
@@ -259,14 +236,19 @@ function addMsgToUI(role, content, meta = {}) {
     const speakBtn = document.createElement('button');
     speakBtn.innerHTML = '🔊';
     speakBtn.className = 'speak-btn';
-    speakBtn.style.background = 'none'; speakBtn.style.border = 'none'; speakBtn.style.cursor = 'pointer'; speakBtn.style.fontSize = '1.2rem'; speakBtn.style.marginRight = '8px';
+    speakBtn.style.cssText = 'background:none;border:none;cursor:pointer;font-size:1.2rem;margin-right:8px;';
     speakBtn.title = 'انطق الرد';
     speakBtn.onclick = () => {
       if (window.speechSynthesis) {
         window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(content);
         utterance.lang = 'ar-EG';
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
         window.speechSynthesis.speak(utterance);
+        state.speechEnabled = true;
+      } else {
+        alert('المتصفح لا يدعم النطق');
       }
     };
     wrap.insertBefore(speakBtn, bubble);
@@ -301,29 +283,72 @@ function addToChat(role, content, meta = {}) { const c = getActiveChat(); c.mess
 function exportChatsFile(chats = state.chats, name = 'almasry-chats.json') { const blob = new Blob([JSON.stringify({ exportedAt: new Date(), chats }, null, 2)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(blob), 100); }
 function importChats(obj) { const incoming = Array.isArray(obj?.chats) ? obj.chats : Array.isArray(obj) ? obj : null; if (!incoming) throw new Error('ملف غير صالح'); const norm = incoming.map(c => ({ ...c, id: c.id || uid(), messages: c.messages.map(m => ({ ...m })) })); state.chats = [...norm, ...state.chats].filter((c, i, a) => i === a.findIndex(x => x.id === c.id)); state.activeChatId = state.chats[0]?.id || ''; persist(); renderConversationList(); renderChat(); }
 
-// ========== 13. SMART ROUTING ==========
-function classifyIntent(text) { const t = text.toLowerCase(); if (/شرح|افهم|وضح|عرفني|كيف يعمل/.test(t)) return 'explain'; if (/اختصر|ملخص|لخص|باختصار|خلاصة/.test(t)) return 'summarize'; if (/كود|برمجة|debug|اكتب|فنكشن|سكريبت/.test(t)) return 'code'; if (/قارن|مقارنة|vs|فرق|بين.+(و|،)/.test(t)) return 'compare'; if (/ترجم|translate/.test(t)) return 'translate'; if (/مقال|موضوع|تقرير/.test(t) && t.length > 150) return 'longform'; return 'general'; }
-function pickSmartModel(text, hasImage = false) { if (hasImage) return state.provider === 'openai' ? 'gpt-4o' : DEFAULT_MODEL; const intent = classifyIntent(text); const isOpen = state.provider === 'openai'; switch (intent) { case 'explain': return isOpen ? 'gpt-4o' : 'llama-3.3-70b-versatile'; case 'summarize': return isOpen ? 'gpt-4o-mini' : 'llama-3.1-8b-instant'; case 'code': return isOpen ? 'gpt-4o' : 'qwen-qwq-32b'; case 'compare': return isOpen ? 'gpt-4o' : 'llama-3.3-70b-versatile'; case 'translate': return isOpen ? 'gpt-4o-mini' : 'llama-3.1-8b-instant'; case 'longform': return isOpen ? 'gpt-4o' : 'llama-3.3-70b-versatile'; default: return DEFAULT_MODEL; } }
-function getModelCandidates(text, hasImage = false) { if (state.routingMode === 'manual') return [state.currentModel]; const smart = pickSmartModel(text, hasImage); const allBase = currentProvider().models; const all = [smart, state.currentModel, ...state.customModels, ...allBase]; return [...new Set(all.filter(Boolean))]; }
+// ========== 13. SMART ROUTING (فائق الذكاء) ==========
+function classifyIntent(text) {
+  const t = text.toLowerCase();
+  if (/شرح|افهم|وضح|عرفني|كيف يعمل|لماذا|ما هو/.test(t)) return 'explain';
+  if (/اختصر|ملخص|لخص|باختصار|خلاصة|نقطة/.test(t)) return 'summarize';
+  if (/كود|برمجة|debug|اكتب|فنكشن|سكريبت|مكتبة|دالة/.test(t)) return 'code';
+  if (/قارن|مقارنة|vs|فرق|بين.+(و|،)/.test(t)) return 'compare';
+  if (/ترجم|translate|معنى/.test(t)) return 'translate';
+  if (/مقال|موضوع|تقرير|بحث|تحليل/.test(t) && t.length > 150) return 'longform';
+  if (/مشكلة|خطأ|bug|عطل|إصلاح/.test(t)) return 'debug';
+  return 'general';
+}
+function pickSmartModel(text, hasImage = false) {
+  if (hasImage) return state.provider === 'openai' ? 'gpt-4o' : DEFAULT_MODEL;
+  const intent = classifyIntent(text);
+  const isOpen = state.provider === 'openai';
+  switch (intent) {
+    case 'explain': return isOpen ? 'gpt-4o' : 'llama-3.3-70b-versatile';
+    case 'summarize': return isOpen ? 'gpt-4o-mini' : 'llama-3.1-8b-instant';
+    case 'code': return isOpen ? 'gpt-4o' : 'qwen-qwq-32b';
+    case 'compare': return isOpen ? 'gpt-4o' : 'llama-3.3-70b-versatile';
+    case 'translate': return isOpen ? 'gpt-4o-mini' : 'llama-3.1-8b-instant';
+    case 'longform': return isOpen ? 'gpt-4o' : 'llama-3.3-70b-versatile';
+    case 'debug': return isOpen ? 'gpt-4o' : 'qwen-qwq-32b';
+    default: return DEFAULT_MODEL;
+  }
+}
+function getModelCandidates(text, hasImage = false) {
+  if (state.routingMode === 'manual') return [state.currentModel];
+  const smart = pickSmartModel(text, hasImage);
+  const allBase = currentProvider().models;
+  const all = [smart, state.currentModel, ...state.customModels, ...allBase];
+  return [...new Set(all.filter(Boolean))];
+}
 function isDevQuestion(text) { const q = text.toLowerCase(); return ['مين عملك', 'من طورك', 'who made you', 'who created you', 'who developed you', 'طورك', 'مين عمل البرنامج', 'مين محمد رجب', 'من هو محمد رجب', 'محمد رجب عبد المنعم', 'المطور'].some(kw => q.includes(kw)); }
-function buildMessages(chat, userText, userImage, ocrText = '') { const limit = (userText || '').length > 200 ? 10 : 20; const history = chat.messages.filter(m => m.role === 'user' || m.role === 'assistant').slice(-limit).map(m => ({ role: m.role, content: m.content })); const msgs = [{ role: 'system', content: SYSTEM_PROMPT }, ...history]; let finalUserText = userText; if (ocrText) finalUserText = `[نص مستخرج من الصورة عبر OCR]:\n${ocrText}\n\nسؤال المستخدم: ${userText}`; if (userImage && state.provider === 'openai') msgs.push({ role: 'user', content: [{ type: 'text', text: finalUserText || 'افحص الصورة' }, { type: 'image_url', image_url: { url: userImage.dataUrl } }] }); else msgs.push({ role: 'user', content: finalUserText }); return msgs; }
+function buildMessages(chat, userText, userImage, ocrText = '') {
+  const limit = (userText || '').length > 200 ? 10 : 20;
+  const history = chat.messages.filter(m => m.role === 'user' || m.role === 'assistant').slice(-limit).map(m => ({ role: m.role, content: m.content }));
+  const msgs = [{ role: 'system', content: SYSTEM_PROMPT }, ...history];
+  let finalUserText = userText;
+  if (ocrText) finalUserText = `[نص مستخرج من الصورة عبر OCR]:\n${ocrText}\n\nسؤال المستخدم: ${userText}`;
+  if (userImage && state.provider === 'openai') msgs.push({ role: 'user', content: [{ type: 'text', text: finalUserText || 'افحص الصورة' }, { type: 'image_url', image_url: { url: userImage.dataUrl } }] });
+  else msgs.push({ role: 'user', content: finalUserText });
+  return msgs;
+}
 
-// ========== 14. STREAMING API مع تحسين الأداء ==========
+// ========== 14. STREAMING API (سريع مع تحسين الأداء) ==========
 async function callAPIStream(provider, model, messages, onChunk, signal) {
   const prov = PROVIDERS[provider]; const key = provider === 'openai' ? state.openaiKey : state.groqKey; const cacheKey = getCacheKey(provider, model, messages); const cached = getCached(cacheKey); if (cached) { onChunk(cached, true); return cached; }
   let attempt = 0, delay = 1000;
   while (attempt < 3) {
     try {
-      const res = await fetch(prov.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` }, body: JSON.stringify({ model, messages, temperature: 0.85, max_tokens: 2500, top_p: 0.95, stream: true }), signal });
+      const res = await fetch(prov.endpoint, {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+        body: JSON.stringify({ model, messages, temperature: 0.9, max_tokens: 3000, top_p: 0.95, stream: true }), signal
+      });
       if (res.status === 429) { await sleep(delay); delay *= 2; attempt++; continue; }
       if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.error?.message || `HTTP ${res.status}`); }
       const reader = res.body.getReader(); const decoder = new TextDecoder(); let fullReply = ''; let lastUpdate = 0;
       while (true) {
         const { done, value } = await reader.read(); if (done) break;
-        const chunk = decoder.decode(value); const lines = chunk.split('\n').filter(l => l.trim().startsWith('data: '));
+        const chunk = decoder.decode(value);
+        const lines = chunk.split('\n').filter(l => l.trim().startsWith('data: '));
         for (const line of lines) {
           const data = line.slice(6); if (data === '[DONE]') continue;
-          try { const parsed = JSON.parse(data); const content = parsed.choices[0]?.delta?.content; if (content) { fullReply += content; const now = Date.now(); if (now - lastUpdate > 50) { onChunk(fullReply, false); lastUpdate = now; } } } catch (e) { }
+          try { const parsed = JSON.parse(data); const content = parsed.choices[0]?.delta?.content; if (content) { fullReply += content; const now = Date.now(); if (now - lastUpdate > 30) { onChunk(fullReply, false); lastUpdate = now; } } } catch (e) { }
         }
       }
       if (!fullReply || fullReply.length < 5) throw new Error('Streaming incomplete');
@@ -332,21 +357,57 @@ async function callAPIStream(provider, model, messages, onChunk, signal) {
   }
 }
 
-// ========== 15. SEND CHAT مع تحليل الصور و OCR ==========
+// ========== 15. دعم لصق الصور من الحافظة (Ctrl+V) ==========
+function handleImagePaste(e) {
+  const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+  for (let item of items) {
+    if (item.type.indexOf('image') !== -1) {
+      e.preventDefault();
+      const blob = item.getAsFile();
+      if (blob) {
+        const file = new File([blob], 'pasted-image.png', { type: blob.type });
+        attachImageFromFile(file);
+      }
+      break;
+    }
+  }
+}
+
+async function attachImageFromFile(file) {
+  const reader = new FileReader();
+  reader.onload = async () => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      let w = img.width, h = img.height, max = 1024;
+      if (w > h && w > max) { h = Math.round(h * max / w); w = max; } else if (h > max) { w = Math.round(w * max / h); h = max; }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      state.attachedImage = { name: file.name, dataUrl: canvas.toDataURL('image/jpeg', 0.8) };
+      updateAttachmentBox();
+      if (el.imageOcrStatus) el.imageOcrStatus.textContent = '✅ تم اللصق، جاهز للتحليل';
+      setTimeout(() => { if (el.imageOcrStatus) el.imageOcrStatus.textContent = ''; }, 3000);
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ========== 16. SEND CHAT (سريع، ذكي، مع دعم الصور) ==========
 async function sendChat(text, isRetry = false) {
-  let finalText = text; // لا نستخدم sanitize على النص نفسه، فقط على المخرجات
+  let finalText = text;
   if (!finalText.trim() || state.isSending) return;
-  const now = Date.now(); if (now - state.lastSendTime < 500 && !isRetry) { el.apiState.textContent = '⚡ انتظر قليلاً'; return; }
+  const now = Date.now(); if (now - state.lastSendTime < 400 && !isRetry) { el.apiState.textContent = '⚡ انتظر قليلاً'; return; }
   state.lastSendTime = now;
   if (!currentKey()) { addMsgToUI('user', finalText); addToChat('user', finalText); addMsgToUI('assistant', '⚠️ أدخل مفتاح API في الإعدادات أولاً (Groq مجاني).'); addToChat('assistant', '⚠️ أدخل مفتاح API'); return; }
-  state.isSending = true; el.sendBtn.disabled = true; el.sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; el.apiState.textContent = '⚡ يبث...';
+  state.isSending = true; el.sendBtn.disabled = true; el.sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; el.apiState.textContent = '⚡ يبث (سريع)...';
   if (state.abortController) state.abortController.abort(); state.abortController = new AbortController();
   try {
     if (isDevQuestion(finalText)) { addMsgToUI('user', finalText); addToChat('user', finalText); const devInfo = '**المهندس محمد رجب عبد المنعم**\n📍 الفيوم – مركز طامية\n💻 برمجة تطبيقات وأمن سيبراني\n🎓 طالب نظم ومعلومات\n🎂 25 أكتوبر 2006 (19 سنة)\n📦 مشاريعه على GitHub'; addMsgToUI('assistant', devInfo); addToChat('assistant', devInfo); state.isSending = false; el.sendBtn.disabled = false; el.sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>'; return; }
     const img = state.attachedImage; let ocrText = '';
     if (img && img.dataUrl) { ocrText = await extractTextFromImage(img.dataUrl); if (ocrText) addToChat('system', `[OCR result: ${ocrText}]`); }
     addMsgToUI('user', finalText, { imageDataUrl: img?.dataUrl, imageName: img?.name }); addToChat('user', finalText, { imageDataUrl: img?.dataUrl, imageName: img?.name });
-    addThinkingIndicator(); await sleep(300);
+    addThinkingIndicator();
     const chat = getActiveChat(); const candidates = getModelCandidates(finalText, !!img); let lastError = null, success = false;
     for (const model of candidates) {
       try { const msgs = buildMessages(chat, finalText, img, ocrText); removeThinking(); const bubble = addMsgToUI('assistant', '', { isStreaming: true }); const streamId = bubble.id; let accumulated = ''; const onChunk = (chunk, isEnd) => { if (chunk && chunk !== accumulated) { accumulated = chunk; const bubbleEl = document.getElementById(streamId); if (bubbleEl) { const safeHtml = sanitizeHTML(md.render(accumulated)); bubbleEl.innerHTML = safeHtml; if (window.Prism) Prism.highlightAllUnder(bubbleEl); scrollBottom(); } } if (isEnd && accumulated) { addToChat('assistant', accumulated); success = true; } }; await callAPIStream(state.provider, model, msgs, onChunk, state.abortController.signal); if (success) { state.currentModel = model; chat.model = model; persist(); if (el.modelSelect) el.modelSelect.value = model; el.modelState.textContent = `🤖 ${model.split('-').slice(0, 3).join('-')}`; el.apiState.textContent = `⚡ ✅ ${model.split('-')[0]}`; state.attachedImage = null; updateAttachmentBox(); return; } } catch (err) { if (err.name !== 'AbortError') lastError = err; removeThinking(); continue; } }
@@ -354,19 +415,19 @@ async function sendChat(text, isRetry = false) {
   } finally { state.isSending = false; el.sendBtn.disabled = false; el.sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>'; state.abortController = null; persist(); }
 }
 
-// ========== 16. الوظائف الأخرى (بحث، صور، مفاتيح) ==========
+// ========== 17. بقية الوظائف (بحث، صور، مفاتيح) ==========
 async function deepSearch() { const q = el.searchInput.value.trim(); if (!q) return; el.searchResults.innerHTML = '<div>⏳ جاري...</div>'; try { const url = `https://ar.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(q)}&format=json&origin=*`; const res = await fetch(url); const data = await res.json(); const hits = data?.query?.search || []; if (!hits.length) { el.searchResults.innerHTML = '<div class="empty-hint">لا نتائج</div>'; return; } el.searchResults.innerHTML = hits.slice(0, 6).map(r => `<div class="result-item"><strong>${escHTML(r.title)}</strong><small>${escHTML((r.snippet || '').replace(/<[^>]+>/g, ''))}</small></div>`).join('') + `<div class="result-item"><button class="ghost-btn" onclick="window.open('https://www.google.com/search?q=${encodeURIComponent(q)}','_blank','noopener noreferrer')"><i class="fab fa-google"></i> بحث جوجل</button></div>`; } catch (e) { el.searchResults.innerHTML = `<div class="status-box bad">خطأ: ${escHTML(e.message)}</div>`; } }
 function generateImage() { const p = el.imagePrompt.value.trim(); if (!p) return; el.imageResult.innerHTML = `<div>⏳ توليد...</div><img class="msg-image" src="https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?width=1024&height=1024&nologo=true" onclick="window.open(this.src,'_blank','noopener noreferrer')" onload="this.previousSibling.textContent='✅ جاهز'">`; }
 function saveKeys() { state.groqKey = el.groqKeyInput.value.trim(); state.openaiKey = el.openaiKeyInput.value.trim(); persist(); refreshKeyUI(); setStatus(el.keyStatus, 'good', '✅ حفظت المفاتيح مؤقتاً (غير آمن).'); }
 function clearKeys() { state.groqKey = ''; state.openaiKey = ''; sessionStorage.removeItem(STORAGE.groqKey); sessionStorage.removeItem(STORAGE.openaiKey); refreshKeyUI(); }
 async function testKey() { if (!currentKey()) { setStatus(el.keyStatus, 'warn', 'لا مفتاح'); return; } el.testKeyBtn.disabled = true; try { const msgs = [{ role: 'system', content: 'رد بكلمة واحدة' }, { role: 'user', content: 'مرحباً' }]; const m = state.provider === 'openai' ? 'gpt-4o-mini' : 'llama-3.1-8b-instant'; let reply = ''; await callAPIStream(state.provider, m, msgs, (chunk, isEnd) => { if (chunk && !isEnd) reply = chunk; }, null); setStatus(el.keyStatus, 'good', `✅ يعمل: ${reply.slice(0, 40)}`); } catch (e) { setStatus(el.keyStatus, 'bad', `❌ ${e.message}`); } finally { el.testKeyBtn.disabled = false; } }
-function attachImage(file) { return new Promise((res, rej) => { const reader = new FileReader(); reader.onload = () => { const img = new Image(); img.onload = () => { const canvas = document.createElement('canvas'); let w = img.width, h = img.height, max = 1024; if (w > h && w > max) { h = Math.round(h * max / w); w = max; } else if (h > max) { w = Math.round(w * max / h); h = max; } canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h); state.attachedImage = { name: file.name, dataUrl: canvas.toDataURL('image/jpeg', 0.8) }; updateAttachmentBox(); res(); }; img.onerror = () => rej(new Error('فشل تحميل الصورة')); img.src = reader.result; }; reader.onerror = () => rej(new Error('فشل قراءة الملف')); reader.readAsDataURL(file); }); }
+function attachImage(file) { return attachImageFromFile(file); }
 function clearAttachment() { state.attachedImage = null; updateAttachmentBox(); }
 function autoResize(ta) { ta.style.height = 'auto'; ta.style.height = Math.min(ta.scrollHeight, 200) + 'px'; }
 function refreshUI() { buildProviderOptions(); buildModelOptions(); renderModelNotes(); refreshKeyUI(); updateAttachmentBox(); if (el.providerSelect) el.providerSelect.value = state.provider; if (el.routingModeSelect) el.routingModeSelect.value = state.routingMode; if (el.modelSelect && state.currentModel) el.modelSelect.value = state.currentModel; if (el.customModelInput) el.customModelInput.value = state.customModels.join(', '); el.modelState.textContent = `🤖 ${state.currentModel.split('-').slice(0, 3).join('-')}`; updateBgAutoBtn(); }
 function persist() { if (state.groqKey) sessionStorage.setItem(STORAGE.groqKey, state.groqKey); if (state.openaiKey) sessionStorage.setItem(STORAGE.openaiKey, state.openaiKey); localStorage.setItem(STORAGE.provider, state.provider); localStorage.setItem(STORAGE.model, state.currentModel); localStorage.setItem(STORAGE.customModels, JSON.stringify(state.customModels)); localStorage.setItem(STORAGE.routingMode, state.routingMode); localStorage.setItem(STORAGE.chats, JSON.stringify(state.chats)); localStorage.setItem(STORAGE.activeChat, state.activeChatId); localStorage.setItem(STORAGE.bgIndex, String(state.bgIndex)); localStorage.setItem(STORAGE.autoBg, state.autoBg ? '1' : '0'); }
 
-// ========== 17. ربط الأحداث ==========
+// ========== 18. ربط الأحداث مع دعم اللصق ==========
 $$('.nav-btn').forEach(b => b.addEventListener('click', () => activateTab(b.dataset.tab)));
 el.providerSelect.addEventListener('change', () => { state.provider = el.providerSelect.value; state.currentModel = currentProvider().models[0] || DEFAULT_MODEL; persist(); buildModelOptions(); refreshUI(); });
 el.routingModeSelect.addEventListener('change', () => { state.routingMode = el.routingModeSelect.value; persist(); renderModelNotes(); buildModelOptions(); });
@@ -375,6 +436,8 @@ el.customModelInput.addEventListener('change', () => { state.customModels = [...
 el.sendBtn.addEventListener('click', () => { const t = el.chatInput.value.trim(); if (t) { el.chatInput.value = ''; autoResize(el.chatInput); sendChat(t); } });
 el.chatInput.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); el.sendBtn.click(); } });
 el.chatInput.addEventListener('input', () => autoResize(el.chatInput));
+el.chatInput.addEventListener('paste', handleImagePaste);
+document.addEventListener('paste', (e) => { if (document.activeElement === el.chatInput) return; handleImagePaste(e); }); // دعم اللصق في أي مكان
 $$('[data-fill]').forEach(b => b.addEventListener('click', () => { el.chatInput.value = b.dataset.fill; el.chatInput.focus(); autoResize(el.chatInput); }));
 el.saveKeysBtn.addEventListener('click', saveKeys); el.clearKeysBtn.addEventListener('click', clearKeys);
 el.toggleKeysBtn.addEventListener('click', () => { el.groqKeyInput.type = el.groqKeyInput.type === 'password' ? 'text' : 'password'; el.openaiKeyInput.type = el.openaiKeyInput.type === 'password' ? 'text' : 'password'; });
@@ -399,5 +462,5 @@ el.bgPrevBtn.addEventListener('click', () => setBackground(state.bgIndex - 1)); 
 el.bgAutoBtn.addEventListener('click', () => { state.autoBg = !state.autoBg; persist(); updateBgAutoBtn(); startAutoBg(); });
 document.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); newChat(); } if ((e.ctrlKey || e.metaKey) && e.key === 'ArrowRight') { e.preventDefault(); setBackground(state.bgIndex - 1); } if ((e.ctrlKey || e.metaKey) && e.key === 'ArrowLeft') { e.preventDefault(); setBackground(state.bgIndex + 1); } });
 
-// ========== 18. INIT ==========
-(function init() { if (!state.chats.length) state.chats = [makeChat()]; if (!state.activeChatId) state.activeChatId = state.chats[0].id; refreshUI(); renderChat(); initBackgrounds(); el.chatInput.focus(); console.log(`🦅 v9.0 – أمان كامل، OCR، Markdown، خلفيات ${BACKGROUNDS.length}`); })();
+// ========== 19. INIT ==========
+(function init() { if (!state.chats.length) state.chats = [makeChat()]; if (!state.activeChatId) state.activeChatId = state.chats[0].id; refreshUI(); renderChat(); initBackgrounds(); el.chatInput.focus(); console.log(`🦅 v9.2 – لصق الصور، صوت، سرعة فائقة، ذكاء متقدم، خلفيات ${BACKGROUNDS.length}`); })();

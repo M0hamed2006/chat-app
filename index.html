@@ -3,961 +3,304 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>المصري الذكي – النسخة الفخمة 🦅 v4.0</title>
+  <title>المصري الذكي – النسخة الأسطورية 🦅</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-  <style>
-    :root {
-      --bg-dark: #0a0e27;
-      --bg-darker: #05070f;
-      --bg-card: #1a1f3a;
-      --bg-light: #2d3561;
-      --text-primary: #ffffff;
-      --text-secondary: #a0a9c9;
-      --accent-primary: #10a37f;
-      --accent-gold: #ffd166;
-      --accent-cyan: #00d9ff;
-      --shadow-lg: 0 25px 60px rgba(0, 0, 0, 0.4);
-      --shadow-md: 0 15px 35px rgba(0, 0, 0, 0.25);
-      --shadow-sm: 0 5px 15px rgba(0, 0, 0, 0.15);
-      --gradient-primary: linear-gradient(135deg, #10a37f 0%, #00d9ff 50%, #ffd166 100%);
-      --gradient-dark: linear-gradient(135deg, rgba(16, 163, 127, 0.2), rgba(0, 217, 255, 0.15));
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; width: 100%; }
-    
-    body {
-      font-family: 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--bg-darker);
-      color: var(--text-primary);
-      overflow: hidden;
-    }
-
-    /* ===== BACKGROUND SYSTEM ===== */
-    .wallpaper {
-      position: fixed;
-      inset: 0;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      opacity: 0.45;
-      filter: saturate(1.05) contrast(1.08) brightness(0.95);
-      transition: background-image 1s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: 
-        radial-gradient(circle at 30% 70%, rgba(16, 163, 127, 0.08), transparent 50%),
-        linear-gradient(135deg, rgba(5, 7, 15, 0.75), rgba(10, 14, 39, 0.85), rgba(5, 7, 15, 0.75));
-      pointer-events: none;
-      z-index: 1;
-      backdrop-filter: blur(2px);
-    }
-
-    .app {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      width: 100%;
-      height: 100vh;
-    }
-
-    /* ===== SIDEBAR ===== */
-    .sidebar {
-      width: 380px;
-      min-width: 380px;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      background: linear-gradient(180deg, rgba(10, 14, 39, 0.95), rgba(5, 7, 15, 0.98));
-      border-left: 1px solid rgba(16, 163, 127, 0.1);
-      backdrop-filter: blur(30px);
-      box-shadow: var(--shadow-lg);
-      overflow: hidden;
-      position: relative;
-    }
-
-    .sidebar::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -20%;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(16, 163, 127, 0.15), transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
-      filter: blur(40px);
-    }
-
-    .brand {
-      padding: 32px 24px 24px;
-      border-bottom: 1px solid rgba(16, 163, 127, 0.1);
-      text-align: center;
-      position: relative;
-      z-index: 1;
-      background: linear-gradient(180deg, rgba(16, 163, 127, 0.05), transparent);
-    }
-
-    .brand-badge {
-      width: 90px;
-      height: 90px;
-      margin: 0 auto 18px;
-      border-radius: 28px;
-      display: grid;
-      place-items: center;
-      background: var(--gradient-primary);
-      color: #05070f;
-      font-size: 2.5rem;
-      box-shadow: 0 20px 50px rgba(16, 163, 127, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-      animation: float 3s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-12px); }
-    }
-
-    .logo {
-      margin: 0;
-      font-size: 2.2rem;
-      font-weight: 900;
-      line-height: 1.2;
-      background: var(--gradient-primary);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      letter-spacing: 1px;
-    }
-
-    .brand small {
-      display: block;
-      margin-top: 10px;
-      color: var(--text-secondary);
-      font-size: 0.8rem;
-      letter-spacing: 0.5px;
-    }
-
-    .tabs {
-      padding: 14px 12px;
-      display: grid;
-      gap: 8px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .tab-btn {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 16px;
-      border: 1px solid rgba(16, 163, 127, 0.1);
-      background: rgba(16, 163, 127, 0.05);
-      color: var(--text-secondary);
-      border-radius: 14px;
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 0.95rem;
-      font-weight: 600;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      white-space: nowrap;
-      text-align: right;
-    }
-
-    .tab-btn i {
-      width: 20px;
-      text-align: center;
-      color: var(--accent-gold);
-    }
-
-    .tab-btn:hover {
-      background: rgba(16, 163, 127, 0.12);
-      border-color: rgba(16, 163, 127, 0.2);
-      transform: translateX(-4px);
-    }
-
-    .tab-btn.active {
-      background: var(--gradient-dark);
-      border-color: rgba(16, 163, 127, 0.3);
-      color: var(--accent-cyan);
-      box-shadow: 0 0 20px rgba(16, 163, 127, 0.2);
-    }
-
-    .conversation-panel {
-      flex: 1;
-      margin: 8px 12px;
-      display: flex;
-      flex-direction: column;
-      background: rgba(16, 163, 127, 0.04);
-      border: 1px solid rgba(16, 163, 127, 0.1);
-      border-radius: 18px;
-      overflow: hidden;
-      min-height: 0;
-      position: relative;
-      z-index: 1;
-    }
-
-    .conversation-head {
-      padding: 14px 16px;
-      border-bottom: 1px solid rgba(16, 163, 127, 0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: 700;
-      color: var(--text-primary);
-      font-size: 0.95rem;
-    }
-
-    .conversation-list {
-      flex: 1;
-      overflow-y: auto;
-      padding: 8px;
-      display: grid;
-      gap: 6px;
-      min-height: 0;
-    }
-
-    .conversation-list::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .conversation-list::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .conversation-list::-webkit-scrollbar-thumb {
-      background: rgba(16, 163, 127, 0.3);
-      border-radius: 3px;
-    }
-
-    .conversation-item {
-      padding: 12px 14px;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(16, 163, 127, 0.08);
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all 0.25s ease;
-      font-size: 0.9rem;
-      text-align: right;
-    }
-
-    .conversation-item:hover {
-      background: rgba(16, 163, 127, 0.08);
-      border-color: rgba(16, 163, 127, 0.15);
-    }
-
-    .conversation-item.active {
-      background: var(--gradient-dark);
-      border-color: rgba(16, 163, 127, 0.3);
-      color: var(--accent-cyan);
-    }
-
-    .conversation-item .title {
-      font-weight: 700;
-      margin-bottom: 4px;
-      color: var(--text-primary);
-    }
-
-    .conversation-item .meta {
-      color: var(--text-secondary);
-      font-size: 0.8rem;
-    }
-
-    .sidebar-footer {
-      margin-top: auto;
-      padding: 16px;
-      border-top: 1px solid rgba(16, 163, 127, 0.1);
-      text-align: center;
-      color: var(--text-secondary);
-      font-size: 0.85rem;
-      background: rgba(16, 163, 127, 0.03);
-      position: relative;
-      z-index: 1;
-    }
-
-    .sidebar-footer strong {
-      color: var(--accent-cyan);
-      display: block;
-      margin-bottom: 6px;
-      font-size: 0.9rem;
-    }
-
-    /* ===== MAIN CONTENT ===== */
-    .main-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background: rgba(10, 14, 39, 0.4);
-      backdrop-filter: blur(12px);
-      min-width: 0;
-    }
-
-    .topbar {
-      padding: 20px 28px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid rgba(16, 163, 127, 0.1);
-      background: rgba(5, 7, 15, 0.5);
-      backdrop-filter: blur(18px);
-      gap: 16px;
-    }
-
-    .topbar h2 {
-      margin: 0;
-      font-size: 1.4rem;
-      font-weight: 800;
-      background: var(--gradient-primary);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      letter-spacing: 0.5px;
-    }
-
-    .topbar-right {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    .icon-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      border: 1px solid rgba(16, 163, 127, 0.1);
-      background: rgba(16, 163, 127, 0.05);
-      color: var(--text-secondary);
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-      transition: all 0.25s ease;
-      font-size: 1rem;
-    }
-
-    .icon-btn:hover {
-      background: rgba(16, 163, 127, 0.12);
-      border-color: rgba(16, 163, 127, 0.2);
-      color: var(--accent-cyan);
-    }
-
-    .panel {
-      display: none;
-      flex: 1;
-      flex-direction: column;
-      min-height: 0;
-      overflow: hidden;
-    }
-
-    .panel.active {
-      display: flex;
-    }
-
-    .panel-content {
-      flex: 1;
-      overflow-y: auto;
-      padding: 28px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      min-height: 0;
-    }
-
-    /* ===== CHAT PANEL ===== */
-    .chat-container {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      gap: 0;
-      min-height: 0;
-    }
-
-    .config-card {
-      background: var(--gradient-dark);
-      border: 1px solid rgba(16, 163, 127, 0.15);
-      border-radius: 18px;
-      padding: 20px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      align-items: start;
-      box-shadow: var(--shadow-md);
-    }
-
-    .config-grid {
-      display: grid;
-      gap: 12px;
-    }
-
-    .config-label {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .select, .input {
-      width: 100%;
-      padding: 12px 16px;
-      border: 1px solid rgba(16, 163, 127, 0.15);
-      background: rgba(16, 163, 127, 0.05);
-      color: var(--text-primary);
-      border-radius: 12px;
-      font-family: 'Cairo', inherit;
-      font-size: 0.95rem;
-      transition: all 0.25s ease;
-      outline: none;
-    }
-
-    .select:focus, .input:focus {
-      border-color: rgba(16, 163, 127, 0.4);
-      background: rgba(16, 163, 127, 0.08);
-      box-shadow: 0 0 0 3px rgba(16, 163, 127, 0.1);
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-    }
-
-    .stat-box {
-      background: rgba(16, 163, 127, 0.04);
-      border: 1px solid rgba(16, 163, 127, 0.1);
-      border-radius: 14px;
-      padding: 16px;
-      text-align: center;
-    }
-
-    .stat-label {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      margin-bottom: 8px;
-    }
-
-    .stat-value {
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: var(--accent-cyan);
-      word-break: break-word;
-    }
-
-    .chat-area {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background: rgba(10, 14, 39, 0.6);
-      border-radius: 18px;
-      border: 1px solid rgba(16, 163, 127, 0.1);
-      overflow: hidden;
-      min-height: 0;
-      margin-top: 12px;
-      box-shadow: var(--shadow-md);
-    }
-
-    .messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      min-height: 0;
-    }
-
-    .messages::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    .messages::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .messages::-webkit-scrollbar-thumb {
-      background: rgba(16, 163, 127, 0.25);
-      border-radius: 4px;
-    }
-
-    .message {
-      display: flex;
-      gap: 12px;
-      align-items: flex-end;
-      animation: slideIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(16px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .message.user {
-      flex-direction: row-reverse;
-    }
-
-    .avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      display: grid;
-      place-items: center;
-      font-size: 1.3rem;
-      flex-shrink: 0;
-      background: var(--gradient-primary);
-      color: #05070f;
-      box-shadow: var(--shadow-md);
-    }
-
-    .message.user .avatar {
-      background: linear-gradient(135deg, #10a37f, #00d9ff);
-    }
-
-    .bubble {
-      max-width: 65%;
-      padding: 14px 18px;
-      border-radius: 18px;
-      background: rgba(16, 163, 127, 0.08);
-      border: 1px solid rgba(16, 163, 127, 0.15);
-      color: var(--text-primary);
-      line-height: 1.6;
-      font-size: 0.95rem;
-      word-wrap: break-word;
-      overflow-wrap: anywhere;
-      white-space: pre-wrap;
-    }
-
-    .message.user .bubble {
-      background: linear-gradient(135deg, rgba(16, 163, 127, 0.3), rgba(0, 217, 255, 0.15));
-      border: 1px solid rgba(16, 163, 127, 0.2);
-      color: var(--text-primary);
-    }
-
-    .composer {
-      padding: 20px;
-      border-top: 1px solid rgba(16, 163, 127, 0.1);
-      background: rgba(5, 7, 15, 0.8);
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .quick-buttons {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .quick-btn {
-      padding: 8px 12px;
-      border-radius: 10px;
-      border: 1px solid rgba(16, 163, 127, 0.15);
-      background: rgba(16, 163, 127, 0.05);
-      color: var(--text-secondary);
-      cursor: pointer;
-      font-size: 0.85rem;
-      font-weight: 600;
-      transition: all 0.25s ease;
-      white-space: nowrap;
-      font-family: inherit;
-    }
-
-    .quick-btn:hover {
-      background: rgba(16, 163, 127, 0.12);
-      border-color: rgba(16, 163, 127, 0.2);
-      color: var(--accent-cyan);
-    }
-
-    .input-area {
-      display: grid;
-      grid-template-columns: 1fr auto auto;
-      gap: 10px;
-      align-items: flex-end;
-    }
-
-    textarea {
-      padding: 14px 16px;
-      border: 1px solid rgba(16, 163, 127, 0.15);
-      background: rgba(16, 163, 127, 0.05);
-      color: var(--text-primary);
-      border-radius: 12px;
-      font-family: 'Cairo', inherit;
-      font-size: 0.95rem;
-      resize: none;
-      max-height: 120px;
-      min-height: 50px;
-      outline: none;
-      transition: all 0.25s ease;
-    }
-
-    textarea:focus {
-      border-color: rgba(16, 163, 127, 0.4);
-      background: rgba(16, 163, 127, 0.08);
-    }
-
-    .send-btn {
-      padding: 12px 18px;
-      border: none;
-      border-radius: 12px;
-      background: var(--gradient-primary);
-      color: #05070f;
-      font-weight: 800;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.3s ease;
-      box-shadow: var(--shadow-md);
-      font-family: inherit;
-      font-size: 0.95rem;
-    }
-
-    .send-btn:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(16, 163, 127, 0.3);
-    }
-
-    .send-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    .voice-btn {
-      padding: 12px 14px;
-      border: 1px solid rgba(16, 163, 127, 0.15);
-      background: rgba(16, 163, 127, 0.05);
-      border-radius: 12px;
-      color: var(--accent-gold);
-      cursor: pointer;
-      font-size: 1.1rem;
-      transition: all 0.25s ease;
-    }
-
-    .voice-btn:hover {
-      background: rgba(16, 163, 127, 0.12);
-      border-color: rgba(16, 163, 127, 0.2);
-    }
-
-    /* ===== MUSIC BUTTON ===== */
-    .music-toggle {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      z-index: 10;
-      width: 65px;
-      height: 65px;
-      border-radius: 50%;
-      background: var(--gradient-primary);
-      border: none;
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-      font-size: 2rem;
-      box-shadow: var(--shadow-lg);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      color: #05070f;
-      font-weight: 900;
-    }
-
-    .music-toggle:hover {
-      transform: scale(1.15);
-      box-shadow: 0 15px 40px rgba(16, 163, 127, 0.4);
-    }
-
-    .music-toggle.playing {
-      animation: pulse-btn 1.5s ease-in-out infinite;
-    }
-
-    @keyframes pulse-btn {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-    }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 1200px) {
-      .sidebar { width: 320px; min-width: 320px; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
-      .bubble { max-width: 75%; }
-      .config-card { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 860px) {
-      .app { flex-direction: column; }
-      .sidebar { width: 100%; min-width: 0; height: auto; }
-      .conversation-panel { max-height: 200px; }
-      .main-content { height: auto; min-height: 100vh; }
-      .panel { min-height: 100vh; }
-      .topbar { flex-direction: column; align-items: stretch; }
-      .bubble { max-width: 100%; }
-      .input-area { grid-template-columns: 1fr; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    .hidden { display: none !important; }
-    .spinner { display: inline-flex; gap: 8px; align-items: center; }
-    .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-gold); animation: pulse 1.2s infinite; }
-    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 209, 102, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 209, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 209, 102, 0); } }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="wallpaper"></div>
-  <div class="overlay"></div>
 
+  <!-- ===== BACKGROUND SYSTEM ===== -->
+  <div class="bg-layer" id="bgLayer1"></div>
+  <div class="bg-layer" id="bgLayer2"></div>
+  <div class="bg-vignette"></div>
+  <div class="bg-noise"></div>
+
+  <!-- ===== BG INDICATOR ===== -->
+  <div class="bg-indicator" id="bgIndicator">
+    <div class="bg-indicator-dots" id="bgDots"></div>
+    <div class="bg-indicator-name" id="bgName">🌊 البحر الهادئ</div>
+  </div>
+
+  <!-- ===== APP SHELL ===== -->
   <div class="app">
+
     <!-- SIDEBAR -->
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+      </div>
+
       <div class="brand">
-        <div class="brand-badge">🦅</div>
+        <div class="brand-eagle">🦅</div>
         <h1 class="logo">المصري الذكي</h1>
-        <small>النسخة الفخمة v4.0 | مع صوت + موسيقى + أمان 🎵</small>
+        <span class="logo-sub">النسخة الأسطورية v3.0</span>
       </div>
 
-      <div class="tabs">
-        <button class="tab-btn active" data-tab="chat">
-          <i class="fas fa-comments"></i>
-          <span>دردشة ذكية</span>
+      <div class="sidebar-actions">
+        <button class="btn-new-chat" id="newChatBtn">
+          <i class="fas fa-plus"></i>
+          <span>محادثة جديدة</span>
         </button>
-        <button class="tab-btn" data-tab="search">
-          <i class="fas fa-magnifying-glass"></i>
-          <span>بحث عميق</span>
-        </button>
-        <button class="tab-btn" data-tab="image">
-          <i class="fas fa-palette"></i>
-          <span>صور</span>
-        </button>
-        <button class="tab-btn" data-tab="settings">
-          <i class="fas fa-sliders"></i>
-          <span>الإعدادات</span>
-        </button>
+        <div class="sidebar-mini-row">
+          <button class="mini-action-btn" id="exportChatsBtn" title="تصدير"><i class="fas fa-download"></i></button>
+          <button class="mini-action-btn" id="importChatsBtn" title="استيراد"><i class="fas fa-upload"></i></button>
+          <button class="mini-action-btn" id="clearAllChatsBtn" title="مسح الكل"><i class="fas fa-broom"></i></button>
+        </div>
       </div>
 
-      <div class="conversation-panel">
-        <div class="conversation-head">
-          <button class="icon-btn" id="clearAllChatsBtn" title="مسح المحادثات">
-            <i class="fas fa-broom"></i>
-          </button>
+      <nav class="sidebar-nav">
+        <button class="nav-btn active" data-tab="chat">
+          <span class="nav-icon"><i class="fas fa-comments"></i></span>
+          <span class="nav-label">دردشة</span>
+        </button>
+        <button class="nav-btn" data-tab="search">
+          <span class="nav-icon"><i class="fas fa-magnifying-glass"></i></span>
+          <span class="nav-label">بحث</span>
+        </button>
+        <button class="nav-btn" data-tab="image">
+          <span class="nav-icon"><i class="fas fa-wand-magic-sparkles"></i></span>
+          <span class="nav-label">صور</span>
+        </button>
+        <button class="nav-btn" data-tab="settings">
+          <span class="nav-icon"><i class="fas fa-gear"></i></span>
+          <span class="nav-label">الإعدادات</span>
+        </button>
+      </nav>
+
+      <div class="conversations-section">
+        <div class="conversations-header">
+          <i class="fas fa-clock-rotate-left"></i>
           <span>المحفوظة</span>
         </div>
-        <div id="conversationList" class="conversation-list"></div>
+        <div class="conversation-list" id="conversationList"></div>
       </div>
 
       <div class="sidebar-footer">
-        <strong>🚀 مطور البرنامج</strong>
-        <div>محمد رجب عبد المنعم</div>
-        <div>Engineer Mohamed Ragab 💚</div>
+        <div class="dev-card">
+          <div class="dev-avatar">م</div>
+          <div class="dev-info">
+            <strong>مطور البرنامج</strong>
+            <span>Mohamed Ragab Abdelmonem</span>
+          </div>
+        </div>
       </div>
     </aside>
 
     <!-- MAIN CONTENT -->
     <main class="main-content">
-      <div class="topbar">
-        <h2 id="panelTitle">🦅 دردشة ذكية</h2>
+
+      <!-- TOPBAR -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="topbar-title-group">
+            <h2 id="panelTitle">🦅 دردشة ذكية</h2>
+            <p id="panelHint">موديلات متعددة + Fallback تلقائي</p>
+          </div>
+        </div>
         <div class="topbar-right">
-          <button class="icon-btn" id="bgPrevBtn" title="الخلفية السابقة">
-            <i class="fas fa-arrow-right"></i>
-          </button>
-          <button class="icon-btn" id="bgNextBtn" title="الخلفية التالية">
-            <i class="fas fa-arrow-left"></i>
-          </button>
-          <button class="icon-btn" id="bgAutoBtn" title="خلفيات تلقائية">
-            <i class="fas fa-rotate"></i>
-          </button>
-          <button class="icon-btn" id="newChatBtn" title="محادثة جديدة">
-            <i class="fas fa-plus"></i>
-          </button>
-          <button class="icon-btn" id="clearChatBtn" title="مسح المحادثة">
+          <div class="bg-controls">
+            <button class="ctrl-btn" id="bgPrevBtn" title="السابق"><i class="fas fa-chevron-right"></i></button>
+            <button class="ctrl-btn active-ctrl" id="bgAutoBtn" title="تشغيل تلقائي"><i class="fas fa-play"></i></button>
+            <button class="ctrl-btn" id="bgNextBtn" title="التالي"><i class="fas fa-chevron-left"></i></button>
+          </div>
+          <button class="ctrl-btn danger-ctrl" id="clearChatBtn" title="مسح المحادثة">
             <i class="fas fa-trash"></i>
           </button>
+          <button class="ctrl-btn" id="newChatTopBtn" title="شات جديد">
+            <i class="fas fa-plus"></i>
+          </button>
         </div>
-      </div>
+      </header>
 
-      <!-- Chat Panel -->
+      <!-- ======== CHAT PANEL ======== -->
       <section id="chat" class="panel active">
-        <div class="chat-container" style="padding: 0; margin: 0; display: flex;">
-          <div class="panel-content" style="padding: 20px 28px; flex: 0 0 auto; gap: 12px;">
-            <div class="config-card">
-              <div>
-                <div class="config-label">📡 مزود الخدمة</div>
-                <select id="providerSelect" class="select"></select>
-                <div class="config-label" style="margin-top: 12px;">🎯 نمط التشغيل</div>
-                <select id="routingModeSelect" class="select">
-                  <option value="auto">🤖 تلقائي ذكي (Fallback)</option>
-                  <option value="manual">🎯 موديل محدد</option>
-                </select>
+        <!-- Model selector bar -->
+        <div class="model-bar">
+          <div class="model-bar-selects">
+            <div class="select-group">
+              <label>المزود</label>
+              <select id="providerSelect" class="glass-select"></select>
+            </div>
+            <div class="select-group">
+              <label>النمط</label>
+              <select id="routingModeSelect" class="glass-select">
+                <option value="auto">🤖 تلقائي ذكي</option>
+                <option value="manual">🎯 موديل محدد</option>
+              </select>
+            </div>
+            <div class="select-group">
+              <label>الموديل</label>
+              <select id="modelSelect" class="glass-select"></select>
+            </div>
+          </div>
+          <div class="model-stats">
+            <div class="stat-pill" id="keyState">🔑 —</div>
+            <div class="stat-pill" id="apiState">⚡ —</div>
+            <div class="stat-pill" id="chatState">💬 —</div>
+            <div class="stat-pill" id="modelState">🤖 —</div>
+          </div>
+        </div>
+
+        <!-- Messages area -->
+        <div class="chat-messages" id="chatMessages"></div>
+
+        <!-- Composer -->
+        <div class="composer">
+          <div class="quick-chips">
+            <button class="qchip" data-fill="اشرح لي هذا ببساطة جدًا 📝">شرح بسيط</button>
+            <button class="qchip" data-fill="اكتب لي كود احترافي ونظيف 💻">كود محترف</button>
+            <button class="qchip" data-fill="راجع الكود واكتشف الأخطاء 🔍">مراجعة كود</button>
+            <button class="qchip" data-fill="حوّل الفكرة لواجهة فخمة جدًا ✨">واجهة فخمة</button>
+            <button class="qchip" id="attachImageBtn"><i class="fas fa-paperclip"></i> صورة</button>
+            <button class="qchip" id="clearAttachmentBtn"><i class="fas fa-xmark"></i> حذف</button>
+          </div>
+          <div class="attachment-preview-bar" id="attachmentBox">
+            <img id="attachmentPreview" src="" alt="attachment" />
+            <div class="att-meta">
+              <div class="att-name" id="attachmentTitle">صورة مرفقة</div>
+              <div class="att-sub">جاهزة للفحص 🔍</div>
+            </div>
+            <button class="att-remove" id="removeAttBtn"><i class="fas fa-xmark"></i></button>
+          </div>
+          <div class="composer-row">
+            <textarea id="chatInput" rows="1" placeholder="اكتب رسالتك... (Enter للإرسال / Shift+Enter سطر جديد)"></textarea>
+            <button id="sendBtn" class="send-btn">
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======== SEARCH PANEL ======== -->
+      <section id="search" class="panel">
+        <div class="panel-scroll">
+          <div class="panel-grid">
+            <div class="glass-card">
+              <div class="card-head">
+                <div class="card-head-icon"><i class="fas fa-magnifying-glass"></i></div>
+                <div>
+                  <h3>بحث عميق</h3>
+                  <p>ويكيبيديا + جوجل مباشر</p>
+                </div>
               </div>
-              <div>
-                <div class="config-label">🧠 النموذج الذكي</div>
-                <select id="modelSelect" class="select"></select>
-                <div class="config-label" style="margin-top: 12px;">⚙️ خيارات</div>
-                <div class="quick-buttons">
-                  <button class="quick-btn" id="exportBtn"><i class="fas fa-download"></i> تصدير</button>
-                  <button class="quick-btn" id="importBtn"><i class="fas fa-upload"></i> استيراد</button>
+              <div class="card-body">
+                <input id="searchInput" class="glass-input" placeholder="ابحث عن أي شيء..." />
+                <div class="btn-row">
+                  <button id="searchBtn" class="primary-btn"><i class="fas fa-magnifying-glass"></i> بحث</button>
+                  <button id="googleSearchBtn" class="secondary-btn"><i class="fab fa-google"></i> جوجل</button>
+                  <button id="searchClearBtn" class="ghost-btn"><i class="fas fa-eraser"></i> مسح</button>
                 </div>
               </div>
             </div>
-
-            <div class="stats-grid">
-              <div class="stat-box">
-                <div class="stat-label">🔑 المفتاح</div>
-                <div class="stat-value" id="keyState">—</div>
+            <div class="glass-card results-card">
+              <div class="card-head">
+                <div class="card-head-icon"><i class="fas fa-layer-group"></i></div>
+                <h3>النتائج</h3>
               </div>
-              <div class="stat-box">
-                <div class="stat-label">🤖 الموديل</div>
-                <div class="stat-value" id="modelState" style="font-size: 0.9rem; overflow: hidden;">—</div>
-              </div>
-              <div class="stat-box">
-                <div class="stat-label">⚡ الحالة</div>
-                <div class="stat-value" id="apiState">—</div>
-              </div>
-              <div class="stat-box">
-                <div class="stat-label">💬 الرسائل</div>
-                <div class="stat-value" id="chatState">—</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="chat-area">
-            <div class="messages" id="chatMessages"></div>
-            <div class="composer">
-              <div class="quick-buttons">
-                <button class="quick-btn" data-fill="اشرح لي هذا ببساطة جدًا 📝">شرح بسيط</button>
-                <button class="quick-btn" data-fill="اكتب كود احترافي ونظيف 💻">كود محترف</button>
-                <button class="quick-btn" data-fill="راجع الكود واكتشف الأخطاء 🔍">مراجعة</button>
-                <button class="quick-btn" data-fill="حوّل الفكرة لواجهة فخمة ✨">واجهة فخمة</button>
-              </div>
-              <div class="input-area">
-                <textarea id="chatInput" placeholder="اكتب رسالتك... (Enter للإرسال / Shift+Enter سطر جديد)"></textarea>
-                <button id="textToSpeechBtn" class="voice-btn" title="اقرأ الرسالة">
-                  <i class="fas fa-volume-up"></i>
-                </button>
-                <button id="sendBtn" class="send-btn">
-                  <i class="fas fa-paper-plane"></i>
-                  <span>إرسال</span>
-                </button>
+              <div class="card-body" id="searchResults">
+                <div class="empty-hint">🔍 ابدأ بالبحث...</div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Search Panel -->
-      <section id="search" class="panel">
-        <div class="panel-content">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
-            <div style="background: var(--gradient-dark); border: 1px solid rgba(16, 163, 127, 0.15); border-radius: 18px; padding: 20px;">
-              <h3 style="margin-bottom: 16px; color: var(--accent-cyan);">🔎 بحث عميق</h3>
-              <input id="searchInput" class="input" placeholder="ابحث عن أي شيء..." />
-              <div style="margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <button id="searchBtn" class="send-btn" style="width: 100%;">بحث</button>
-                <button id="googleSearchBtn" class="send-btn" style="width: 100%; background: linear-gradient(135deg, #ea4335, #fbbc04);">جوجل</button>
-              </div>
-            </div>
-            <div style="background: var(--gradient-dark); border: 1px solid rgba(16, 163, 127, 0.15); border-radius: 18px; padding: 20px;">
-              <h3 style="margin-bottom: 16px; color: var(--accent-cyan);">📋 النتائج</h3>
-              <div id="searchResults" style="min-height: 300px; color: var(--text-secondary); padding: 20px; background: rgba(16, 163, 127, 0.04); border-radius: 12px;">ابدأ بالبحث...</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Image Panel -->
+      <!-- ======== IMAGE PANEL ======== -->
       <section id="image" class="panel">
-        <div class="panel-content">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
-            <div style="background: var(--gradient-dark); border: 1px solid rgba(16, 163, 127, 0.15); border-radius: 18px; padding: 20px;">
-              <h3 style="margin-bottom: 16px; color: var(--accent-cyan);">🎨 الصور الذكية</h3>
-              <input id="imagePrompt" class="input" placeholder="اكتب وصف الصورة..." />
-              <div style="margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <button id="genBtn" class="send-btn" style="width: 100%;">ارسم</button>
-                <button id="samplePromptBtn" class="send-btn" style="width: 100%; background: linear-gradient(135deg, #ffd166, #ff9500);">مثال</button>
+        <div class="panel-scroll">
+          <div class="panel-grid">
+            <div class="glass-card">
+              <div class="card-head">
+                <div class="card-head-icon"><i class="fas fa-palette"></i></div>
+                <div>
+                  <h3>الصور الذكية</h3>
+                  <p>رسم + بحث + فحص</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <input id="imagePrompt" class="glass-input" placeholder="اكتب وصف الصورة المطلوبة..." />
+                <div class="btn-row">
+                  <button id="genBtn" class="primary-btn"><i class="fas fa-wand-magic-sparkles"></i> ارسم</button>
+                  <button id="webImageBtn" class="secondary-btn"><i class="fas fa-globe"></i> بحث</button>
+                  <button id="samplePromptBtn" class="ghost-btn"><i class="fas fa-star"></i> مثال</button>
+                </div>
               </div>
             </div>
-            <div style="background: var(--gradient-dark); border: 1px solid rgba(16, 163, 127, 0.15); border-radius: 18px; padding: 20px;">
-              <h3 style="margin-bottom: 16px; color: var(--accent-cyan);">🖼️ المعاينة</h3>
-              <div id="imageResult" style="min-height: 300px; background: rgba(16, 163, 127, 0.04); border-radius: 12px; display: grid; place-items: center; color: var(--text-secondary);">لا توجد صورة بعد...</div>
+            <div class="glass-card">
+              <div class="card-head">
+                <div class="card-head-icon"><i class="fas fa-image"></i></div>
+                <h3>المعاينة</h3>
+              </div>
+              <div class="card-body" id="imageResult">
+                <div class="empty-hint">🎨 لا توجد صورة بعد...</div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Settings Panel -->
+      <!-- ======== SETTINGS PANEL ======== -->
       <section id="settings" class="panel">
-        <div class="panel-content">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
-            <div style="background: var(--gradient-dark); border: 1px solid rgba(16, 163, 127, 0.15); border-radius: 18px; padding: 20px;">
-              <h3 style="margin-bottom: 16px; color: var(--accent-cyan);">🔑 API Keys</h3>
-              <label class="config-label">Groq API</label>
-              <input type="password" id="groqKeyInput" class="input" placeholder="gsk_..." style="margin-bottom: 12px;" />
-              
-              <label class="config-label">OpenAI API</label>
-              <input type="password" id="openaiKeyInput" class="input" placeholder="sk-..." style="margin-bottom: 12px;" />
-              
-              <label class="config-label">DeepSeek API</label>
-              <input type="password" id="deepseekKeyInput" class="input" placeholder="sk-..." style="margin-bottom: 12px;" />
-              
-              <label class="config-label">Cohere API</label>
-              <input type="password" id="cohereKeyInput" class="input" placeholder="..." style="margin-bottom: 12px;" />
-              
-              <label class="config-label">Claude API (Anthropic)</label>
-              <input type="password" id="claudeKeyInput" class="input" placeholder="sk-ant-..." style="margin-bottom: 12px;" />
-              
-              <label class="config-label">CoPilot API</label>
-              <input type="password" id="copilotKeyInput" class="input" placeholder="..." style="margin-bottom: 12px;" />
-              
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px;">
-                <button id="saveKeysBtn" class="send-btn">حفظ</button>
-                <button id="testKeyBtn" class="send-btn" style="background: linear-gradient(135deg, #ffd166, #ff9500);">اختبار</button>
+        <div class="panel-scroll">
+          <div class="panel-grid">
+            <div class="glass-card">
+              <div class="card-head">
+                <div class="card-head-icon"><i class="fas fa-key"></i></div>
+                <div>
+                  <h3>مفاتيح API</h3>
+                  <p>Groq و OpenAI</p>
+                </div>
               </div>
-              <div id="keyStatus" style="margin-top: 12px; padding: 12px; border-radius: 10px; background: rgba(255, 107, 107, 0.1); border: 1px solid rgba(255, 107, 107, 0.2); color: #ffb4b4; font-size: 0.85rem;">المفاتيح غير محفوظة</div>
+              <div class="card-body">
+                <label class="field-label">🔑 Groq API Key</label>
+                <input type="password" id="groqKeyInput" class="glass-input" placeholder="gsk_..." autocomplete="off" />
+                <label class="field-label" style="margin-top:14px;">🔑 OpenAI API Key</label>
+                <input type="password" id="openaiKeyInput" class="glass-input" placeholder="sk-..." autocomplete="off" />
+                <div class="btn-row" style="margin-top:16px; flex-wrap:wrap;">
+                  <button id="saveKeysBtn" class="primary-btn"><i class="fas fa-floppy-disk"></i> حفظ</button>
+                  <button id="clearKeysBtn" class="ghost-btn"><i class="fas fa-trash-alt"></i> مسح</button>
+                  <button id="toggleKeysBtn" class="ghost-btn"><i class="fas fa-eye"></i> عرض</button>
+                  <button id="testKeyBtn" class="secondary-btn"><i class="fas fa-bolt"></i> اختبار</button>
+                </div>
+                <div class="status-box warn" id="keyStatus">المفاتيح غير محفوظة</div>
+                <div class="status-box info" style="margin-top:8px;">⚠️ المفاتيح تُخزَّن مؤقتاً فقط في الجلسة الحالية.</div>
+              </div>
             </div>
-
-            <div style="background: var(--gradient-dark); border: 1px solid rgba(16, 163, 127, 0.15); border-radius: 18px; padding: 20px;">
-              <h3 style="margin-bottom: 16px; color: var(--accent-cyan);">⚙️ إعدادات متقدمة</h3>
-              <label class="config-label">📝 اسم المحادثة</label>
-              <input id="chatTitleInput" class="input" placeholder="عنوان المحادثة" style="margin-bottom: 12px;" />
-              <button id="saveTitleBtn" class="send-btn" style="width: 100%; margin-bottom: 12px;">حفظ</button>
-
-              <label class="config-label">🤖 موديلات مخصصة</label>
-              <input id="customModelInput" class="input" placeholder="مفصولة بفواصل" style="margin-bottom: 12px;" />
-              
-              <label class="config-label" style="margin-top: 12px;">📋 معلومات الموديلات</label>
-              <textarea id="modelNotes" style="width: 100%; height: 120px; padding: 12px; border-radius: 10px; background: rgba(16, 163, 127, 0.04); border: 1px solid rgba(16, 163, 127, 0.1); color: var(--text-secondary); font-family: monospace; font-size: 0.85rem; resize: none;" readonly></textarea>
-              
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px;">
-                <button id="exportOneBtn" class="send-btn">تصدير</button>
-                <button class="send-btn" id="toggleKeysBtn" style="background: linear-gradient(135deg, #ffd166, #ff9500);">عرض/إخفاء</button>
+            <div class="glass-card">
+              <div class="card-head">
+                <div class="card-head-icon"><i class="fas fa-sliders"></i></div>
+                <div>
+                  <h3>إعدادات متقدمة</h3>
+                  <p>الموديلات والمحادثات</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <label class="field-label">📝 اسم المحادثة</label>
+                <input id="chatTitleInput" class="glass-input" placeholder="عنوان المحادثة الحالية" />
+                <div class="btn-row" style="margin-top:10px;">
+                  <button id="saveTitleBtn" class="primary-btn"><i class="fas fa-floppy-disk"></i> حفظ</button>
+                  <button id="exportOneBtn" class="ghost-btn"><i class="fas fa-download"></i> تصدير</button>
+                </div>
+                <label class="field-label" style="margin-top:14px;">🤖 موديلات مخصصة</label>
+                <input id="customModelInput" class="glass-input" placeholder="model-id-1, model-id-2" />
+                <label class="field-label" style="margin-top:14px;">📋 ملاحظات الموديلات</label>
+                <textarea id="modelNotes" class="glass-input" readonly style="min-height:200px;resize:none;font-size:0.85rem;"></textarea>
               </div>
             </div>
           </div>
         </div>
       </section>
+
     </main>
   </div>
 
-  <!-- Music Toggle Button -->
-  <button id="musicToggle" class="music-toggle" title="تشغيل/إيقاف الموسيقى">🎵</button>
+  <!-- Hidden inputs -->
+  <input type="file" id="importFileInput" accept="application/json" style="display:none" />
+  <input type="file" id="imageFileInput" accept="image/*" style="display:none" />
 
-  <!-- Hidden Inputs -->
-  <input type="file" id="importFileInput" accept="application/json" class="hidden" />
-  <input type="file" id="imageFileInput" accept="image/*" class="hidden" />
-
-  <!-- Audio will be loaded from external module -->
-  <script src="audio-module.js"></script>
-
-  <!-- Main Application -->
   <script src="app.js"></script>
 </body>
 </html>
